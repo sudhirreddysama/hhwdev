@@ -1,0 +1,21 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>Merge Schedules</h1>
+<div class="text">
+	<% if @objs.empty? %>
+		<p>No schedules found with the same date, location and type.</p>
+	<% else %>
+		<p>The following schedules were found having the same date, location and type. Click the &quot;Merge&quot;
+		button to merge the schedules together.</p>
+		<ul>
+			<% @objs.each { |o| %>
+				<li><%= h o.name %></li>
+			<% } %>
+		</ul>
+		<div>
+			<%= form_tag %>
+				<%= submit_tag 'Merge' %>
+			</form>
+		</div>
+	<% end %>
+</div>

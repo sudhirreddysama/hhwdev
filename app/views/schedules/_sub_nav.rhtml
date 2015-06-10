@@ -1,0 +1,10 @@
+<div class="tabs2">
+	<%= tab 'View', :action => :view, :id => @schedule.id %>
+	<%= tab 'Sig. Sheet', :action => :signatures, :id => @schedule.id %>
+	<% if @current_user.admin_level >= 2 %>
+		<%= tab 'Edit', :action => :edit, :id => @schedule.id %>
+		<%= tab 'Delete', :action => :delete, :id => @schedule.id %>
+		<%= tab('Merge Schedules', :id => @schedule.id, :action => :merge) if @schedule and not @schedule.new_record? and @current_user.admin_level >= 2 %>		
+	<% end %>
+	<div class="clear"></div>
+</div>

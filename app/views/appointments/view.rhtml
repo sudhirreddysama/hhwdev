@@ -1,0 +1,64 @@
+<% if @current_user %>
+	<%= render :partial => 'nav' %>
+	<%= render :partial => 'sub_nav' %>
+	<h1>View Appointment</h1>
+<% else %>
+	<h1><span class="eco"><b>eco</b>park</span> Special Collection Calendar and Household Hazardous Waste (HHW) Appointment Scheduler</h1>
+	<%= render :partial => 'progress', :locals => {:num => 5} %>
+	<h2>Appointment Confirmation</h2>
+<% end %>
+<% if @current_user && @appointment.flagged %>
+	<p style="color: #a00; font-weight: bold;">This appointment / phone number has been flagged! <%= h @appointment.sig_comment %></p>
+<% end %>
+<fieldset>
+	<legend>Collection Location and Time</legend>
+	<p>
+		<%= @appointment.when.strftime '%m/%d/%Y %I:%M %p' rescue 'Unknown date / time' %><br />
+		<% if l = @appointment.location %>
+			<%= l.name %><br />
+			<%= l.address %> <%= l.address2 %><br />
+			<%= l.city %> <%= l.state %>, <%= l.zip %>
+		<% else %>
+			Unknown Location
+		<% end %>
+	</p>
+	<% if @appointment.location %>
+		<p><%= link_to 'Map &amp; Directions', directions_link(@appointment) %></p>
+	<% end %>
+</fieldset>
+<fieldset>
+	<legend>Your Information</legend>
+	<p>
+		<%= @appointment.first_name %> <%= @appointment.last_name %><br />
+		<%= @appointment.address %> <%= @appointment.address2 %><br />
+		<%= @appointment.city %> <%= @appointment.state %>, <%= @appointment.zip %><br />
+		Municipality: <%= @appointment.municipality %><br />
+		Phone: <%= @appointment.phone %><br />
+		Email: <%= @appointment.email %>
+	</p>
+</fieldset>
+<fieldset>
+	<legend>Your Comments</legend>
+	<p><%= @appointment.comments.blank? ? '(blank)' : @appointment.comments %></p>
+</fieldset>
+<% if @current_user %>
+	<fieldset>
+		<legend>Customer Service Comments</legend>
+		<p><%= @appointment.admin_comments.blank? ? '(blank)' : @appointment.admin_comments %></p>
+	</fieldset>
+	<fieldset>
+		<legend>Other Information</legend>
+		<p>
+			Made Online: <%= @appointment.online ? 'YES' : 'NO' %><br />
+			Walk In: <%= @appointment.walk_in ? 'YES' : 'NO' %><br />
+			No Show: <%= @appointment.no_show ? 'YES' : 'NO' %><br />
+			Created By: <%= @appointment.user.username rescue nil %><br />
+			Created On: <%= @appointment.created_at.strftime '%m/%d/%Y %I:%M%p' rescue nil %><br />
+			Schedule Link: <%= link_to 'go to schedule', :controller => :schedules, :action => :view, :id => @appointment.block.schedule.id rescue nil %>
+		</p>
+	</fieldset>
+<% end %>
+<fieldset>
+	<legend>Instructions / Confirmation</legend>
+	<p><%= l.confirmation.blank? ? '(none)' : nl2br_h(l.confirmation) rescue nil %></p>
+</fieldset>

@@ -1,0 +1,6 @@
+<div class="tabs">
+	<%= tab 'Survey List', :action => :index %>
+	<%= tab 'New Survey', :action => :new %>
+	<%= tab(@survey.name, {:id => @survey.id}, :action => :view) if @survey and not @survey.new_record? %>
+	<div class="clear"></div>
+</div>

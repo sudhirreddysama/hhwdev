@@ -1,0 +1,24 @@
+<h1>HHW Satisfaction Survey</h1>
+<% if @appointment.survey_taken %>
+	<p>Thank you for taking our satisfaction survey. We appreciate your feedback.</p>
+<% else %>
+	<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+	<p><%= nl2br_h @survey.message %></p>
+	<%= form_tag %>
+		<% @survey.questions.each { |q| %>
+			<div class="field">
+				<label><%= q.text %> <span class="required">*</span></label>
+				<% Survey::ANSWERS.each_with_index { |a, i| %>
+					<%= radio_button_tag "answers[#{q.id}]", i.to_s, @answers[q.id.to_s] == i.to_s %> <%= a %><br />
+				<% } %>
+			</div>
+		<% } %>
+		<div class="field">
+			<label>Additional Comments</label>
+			<%= text_area_tag 'comments', params[:comments], :cols => 40, :rows => 3 %>
+		</div>
+		<div class="field">
+			<%= submit_tag 'Submit Survey' %>
+		</div>
+	</form>
+<% end %>

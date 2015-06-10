@@ -1,0 +1,108 @@
+<% if params[:action] == 'transfer' %>
+	<%= render :partial => 'nav' %>
+	<%= render :partial => 'sub_nav' %>
+	<h1>Transfer Appointment</h1>
+<% else %>
+	<h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler and Pharmaceutical Collection Calendar</h1>
+<% end %>
+<%= render :partial => 'progress', :locals => {:num => 1} unless @current_user %>
+<h2>Choose a Date</h2>
+<p>
+	The calendar displays all <span class="eco"><b>eco</b>park</span> HHW events, mobile HHW collections held at municipal highway departments and scheduled pharmaceutical collections. Appointments are only required to drop off HHW items.</p>  
+<p>
+Calendar Instructions: Click on a highlighted date in the calendar. Click again to choose the service you would like (red - for pharmaceutical disposal, green to make an <span class="eco"><b>eco</b>park</span> HHW appointment or (when available) purple for a mobile HHW appointment). You will then see details (times, address, etc.) of your choice. For HHW appointments, you must click on an available time slot to make a required appointment.
+	<% if @current_user %>
+		Collection dates that no longer have available slots are "x"d out.
+	<% end %>
+	<% @schedules.collect { |d, l| l.collect { |s| s.schedule_type }}.flatten.compact.uniq.each { |t| %>
+		<p><span class="key type_<%= t.id %>"><%= h t.name %></span> <%= t.description %></p>
+	<% } %>
+</p>
+<% sym = (params[:action] == 'transfer' ? :id2 : :id)%>
+<p><%= link_to 'Previous 4 Months', sym => @begin.advance(:months => -4).to_s %> | <%= link_to 'Next 4 Months', sym => @begin.advance(:months => 4).to_s %></p>
+<div id="calendars">
+	<div id="calendars2">
+		<% 4.times { |i| %>
+			<div class="calendar_wrap">
+				<%= calendar(:year => @begin.year, :month => @begin.month, :abbrev => (0..0)) { |d|
+					past = (d <= Time.now.to_date ? ' past' : '')
+					if @schedules[d]
+						a = @schedules[d].find { |s| s.available? or s.interval == 0 }
+						locs = @schedules[d].collect { |s| "loc_#{s.location_id}" }.uniq.join(' ')
+						locs += ' ' + @schedules[d].sort { |a, b| a.schedule_type_id <=> b.schedule_type_id}.collect { |s| "type_#{s.schedule_type_id}" }.uniq.join('_')
+						if @schedules[d].length > 0
+							locs += ' multiple'
+						end
+						[link_to(d.mday, "##{d}", :id => "#{d}_link", :class => 'modal'), {:class => (a ? "collection available #{locs}" : "collection unavailable #{locs}") + past}]
+					else
+						[d.mday, {:class => past}]
+					end
+				} %>
+			</div>
+			<% @begin = @begin.advance :months => 1 %>
+		<% } %>
+		<div class="clear"></div>
+	</div>
+</div>
+<h2>Daily Pharmaceutical Drop-offs</h2>
+<p>
+<ul>
+<li><strong>Brighton Police Department</strong> (2300 Elmwood Ave. 14618) - Daily collections (M-F) 8 a.m. to 6 p.m. (excluding holidays)</li>
+<li><strong>East Rochester Police Department</strong> (317 Main St. 14445) - Daily collections (M-F) 8:30 a.m. to 6 p.m. (excluding holidays)</li>
+<li><strong>Fairport Police Department</strong> (31 S. Main St. 14450) - Daily Collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+<li><strong>Gates Police Department</strong> (1605 Buffalo Rd. 14624) - Daily collections (M-F) 8 a.m. to 5 p.m. (excluding holidays)</li>
+<li><strong>Irondequoit Police Department</strong> (1300 Titus Ave. 14617) - Daily collections (M-Sat.) 8 a.m. to 11 p.m.</li>
+<li><strong>Ogden Police Department</strong> (269 Ogden Center Rd. 14559) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+<li><strong>Webster Police Department</strong> (1000 Ridge Rd. 14580) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+</ul>
+</p>
+<% unless @objs.empty? %>
+	<h2>List By Municipality</h2>
+	<%
+	
+		grp = OrderedHash.new
+		@objs.each { |o|
+			grp[o.location.city] ||= []
+			grp[o.location.city] << o
+		}
+		
+		roc = grp['Rochester']
+		keys = grp.keys
+		keys.delete('Rochester')
+		if roc
+			keys.unshift('Rochester')
+		end
+		
+	%>
+	<% keys.each { |c| os1 = grp[c] %>
+		<h3><%= h c %></h3>
+		<% os1.group_by(&:schedule_type_id).each { |sid, os| %>
+			<% t = os.first.schedule_type %>
+			<p><span class="key type_<%= sid %>"><%= h t.name %></span> <%= t.description %></p>
+			<ul style="margin-bottom: 15px;">
+				<% os.each { |o| %>
+				<li><%= link_to "#{o.date.strftime('%m/%d/%Y')}, #{o.location.name}", "?#{o.date}##{o.date}" %></li>
+				<% } %>
+			</ul>
+		<% } %>
+	<% } %>
+<% end %>
+<% @schedules.each { |d, sched| %>
+	<%= render :partial => 'appointments/calendar_day', :locals => {:d => d } %>
+<% } %>
+<script type="text/javascript">
+    $$('.modal').each(function(link){
+    	new Control.Modal(link);
+    });
+    $$('.sub-pop').each(function(sub) {
+    	sub.hide();
+    });
+    
+    // Safari hack.
+    var c = document.getElementById('calendars');
+    var c2 = document.getElementById('calendars2');
+    c.removeChild(c2);
+    c.appendChild(c2);
+    
+    
+</script>

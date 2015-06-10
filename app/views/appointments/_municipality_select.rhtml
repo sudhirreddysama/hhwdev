@@ -1,0 +1,2 @@
+<%= select_tag 'appointment[municipality]', options_for_select([nil] + Municipality.find_all_by_zip(zip.to_s[0..4], :order => 'name').collect(&:name), municipality),
+	:id => 'appointment_municipality' %>

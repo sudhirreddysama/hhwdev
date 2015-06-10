@@ -1,0 +1,15 @@
+<h1>Login</h1>
+<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+<%= form_tag %>
+	<div class="field">
+		<label>Username:</label>
+		<%= text_field_tag 'username', params[:username] %>
+	</div>
+	<div class="field">
+		<label>Password:</label>
+		<%= password_field_tag 'password', params[:password] %>
+	</div>
+	<div class="field">
+		<%= submit_tag 'Login' %>
+	</div>
+</form>

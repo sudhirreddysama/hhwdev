@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!---->
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Monroe County HHW</title>
+		<%= javascript_include_tag :defaults %>
+		<%= javascript_include_tag 'control.modal.2.2.3.js', 'date' %>
+		<%= stylesheet_link_tag 'mc-content-2col', 'mc-global', 'mc-small' %>
+		<%= stylesheet_link_tag 'mc-print.css', :media => 'print' %>
+		<%= stylesheet_link_tag 'hhw.css', :media => 'all' %>
+		<%= calendar_date_select_includes %>
+		<%= yield :head %>
+		<script type="text/javascript">
+			var root_url = '<%= root_url %>';
+		</script>
+<% if false %>
+	<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	_uacct = "UA-93385-4";
+	urchinTracker();
+	</script>		
+<% end %>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="login">
+				<p>
+					<% if !@current_user %>
+						<%= link_to 'Login', :controller => :login, :action => :index, :id => nil %>
+					<% else %>
+						HHW Backend	
+					<% end %>
+				</p>
+			</div>
+			<% unless @current_user %>
+				<div id="header" style="background-image: url(/i-p/masthead-des.jpg);">
+				</div>
+			<% end %>
+			<div id="navbar">
+				<ul id="nav">
+					<li id="home"><a href="http://www.monroecounty.gov/home-index.php" accesskey="i" class="current" title="My Monroe portal">My Monroe</a></li>
+					<li id="res"><a href="http://www.monroecounty.gov/resident-index.php" accesskey="r" title="Resident portal">Resident</a></li>
+					<li id="vis"><a href="http://www.monroecounty.gov/visitor-index.php" accesskey="v" title="Visitor portal">Visitor</a></li>
+					<li id="bus"><a href="http://www.monroecounty.gov/business-index.php" accesskey="b" title="Business portal">Business</a></li>
+					<li id="gov"><a href="http://www.monroecounty.gov/government-index.php" accesskey="g" title="Government portal">Government</a></li>
+					<li id="emp"><a href="http://www.monroecounty.gov/employment-index.php" accesskey="e" title="Employment portal">Employement</a></li>
+					<li id="dept"><a href="http://www.monroecounty.gov/department-index.php" accesskey="d" title="All Departments">Departments</a></li>
+					<li id="done"><a href="http://www.monroecounty.gov/online" accesskey="o" title="Get It Done Online">Get It Done Online!</a></li>
+				</ul>				
+				<div id="urhere">
+					<p style="font-size: 1px; height: 4px; margin: 0; padding: 0; line-height: 1px;">&nbsp;</p>
+				</div>
+			</div>
+			<div id="wrap-inner">
+				<div id="main-body" class="clearfix">
+					<div id="content-2col">					
+						<div class="text">
+							<% if flash[:notice] %>
+								<p class="notice"><%= flash[:notice] %></p>
+							<% end %>
+							<% if flash[:error] %>
+								<%= render :partial => 'partial/errors', :locals => {:errors => [flash[:error]]} %>
+							<% end %>
+							<%= yield %>
+							<p>For questions or more information, email <a href="mailto:mcdes@monroecounty.gov">mcdes@monroecounty.gov</a> or call (585) 753-7600 (Option #3), M-F, 8 a.m. to 4 p.m., to talk to a customer service representative.</p>
+						</div>
+						<div id="footer">
+							<p class="btmlinks">
+								<a href="http://www.monroecounty.gov/default-about.php" title="Go to About MonroeCounty.gov page">About MonroeCounty.gov</a> &middot; 
+								<a href="http://www.monroecounty.gov/default-accessibilitystandards.php" title="Go to Accessibility and Standards page">Accessibility and Web Standards</a> &middot; 
+								<a href="http://www.monroecounty.gov/default-disclaimer.php" title="Go to Web Disclaimer and Privacy Policy page">Web Disclaimer and Privacy Policy</a></p>
+							<p class="copyright">Official Site of Monroe County, New York. Copyright &copy; <%= Time.now.to_date.strftime '%Y' %> Monroe County. All Rights Reserved.</p>					
+						</div>
+						<div id="leftcol">
+							<div class="menu">
+								<div id="sectionlinks">
+									<% if @current_user %>
+										<%= link_to 'HHW Appointment Scheduler', :controller => :appointments, :action => :index, :id => nil %>
+										<%= link_to 'HHW Schedule List', :controller => :schedules, :action => :index, :id => nil %>
+										<%= link_to 'HHW Appointment Search', :controller => :search, :action => :index, :id => nil %>
+										<% if @current_user.admin_level >= 1 %>
+											<%= link_to 'HHW Export', :controller => :export, :action => :index, :id => nil %>
+											<% if @current_user.admin_level >= 2 %>											
+												<%= link_to 'HHW Locations', :controller => :locations, :action => :index, :id => nil %>
+												<%= link_to 'HHW Reports', :controller => :reports, :action => :index, :id => nil %>
+												<%= link_to 'HHW Surveys', :controller => :surveys, :action => :index, :id => nil %>
+												<%#= link_to 'HHW Content', :controller => :content, :action => :index, :id => nil %>
+												<%= link_to 'HHW Users', :controller => :users, :action => :index, :id => nil %>
+											<% end %>
+										<% end %>										
+										<%= link_to 'Edit My Account', :controller => :login, :action => :edit, :id => nil %>
+										<%= link_to 'Logout', :controller => :login, :action => :logout, :id => nil %>
+									<% else %>
+										<%= link_to 'HHW Appointment Scheduler', :controller => :reservation, :action => :index, :id => nil %>
+									<% end %>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%= IO.read '/home/google-analytics-tracking.inc.html' %>
+	</body>
+</html>

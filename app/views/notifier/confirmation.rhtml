@@ -1,0 +1,33 @@
+MONROE COUNTY HAZARDOUS HOUSEHOLD WASTE APPOINTMENT CONFIRMATION
+
+Collection Location and Time:
+
+<%= @a.block.schedule.date.strftime '%m/%d/%Y' %> <%= @a.block.time.strftime '%I:%M %p' %>
+<% l = @a.block.schedule.location %><%= l.name %>
+<%= l.address %> <%= l.address2 %>
+<%= l.city %> <%= l.state %>, <%= l.zip %>
+
+
+Directions Link:
+
+<%= directions_link @a %>
+
+
+Your Information:
+
+<%= @a.first_name %> <%= @a.last_name %>
+<%= @a.address %> <%= @a.address2 %>
+<%= @a.city %> <%= @a.state %>, <%= @a.zip %>
+Municipality: <%= @a.municipality %>
+Phone: <%= @a.phone %>
+Email: <%= @a.email %>
+
+
+Your Comments:
+
+<%= @a.comments.blank? ? '(blank)' : @a.comments %>
+
+
+Other Information:
+
+<%= l.confirmation.blank? ? '(none)' : l.confirmation %>

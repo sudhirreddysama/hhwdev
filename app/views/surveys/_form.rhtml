@@ -1,0 +1,14 @@
+<%= render :partial => 'partial/errors', :locals => {:errors => @survey.errors} %>
+<% form_for(:survey) { |f| %>
+	<div class="field">
+		<label>Name: <span class="required">*</span></label>
+		<%= f.text_field :name %>
+	</div>
+	<div class="field">
+		<label>Message: <span class="required">*</span></label>
+		<%= f.text_area :message %>
+	</div>
+	<div class="field">
+		<%= submit_tag 'Submit' %>
+	</div>
+<% } %>

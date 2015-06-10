@@ -1,0 +1,22 @@
+<%= render :partial => 'nav' %>
+<h1>User List</h1>
+<table>
+	<tr>
+		<th>Username</th>
+		<th>Email</th>
+		<th>Notes</th>
+		<th>Type</th>
+		<th></th>
+		<th></th>
+	</tr>
+	<% @users.each { |u| %>
+		<tr>
+			<td><%= u.username %></td>
+			<td><%= u.email %></td>
+			<td><%= u.notes %></td>
+			<td><%= u.type %></td>
+			<td><%= link_to 'Edit', :action => :edit, :id => u.id %></td>
+			<td><%= link_to 'Delete', :action => :delete, :id => u.id %></td>
+		</tr>
+	<% } %>
+</table>

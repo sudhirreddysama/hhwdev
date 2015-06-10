@@ -1,0 +1,11 @@
+<%= form_tag %>
+	<%= render :partial => 'partial/errors', :locals => {:errors => @filter.errors} %>
+	<div class="field">
+		<label>Date Range:</label>
+		<%= calendar_date_select_tag 'filter[begin]', @filter.begin %> to 
+		<%= calendar_date_select_tag 'filter[end]', @filter.end %>
+	</div>
+	<div class="field">
+		<%= submit_tag 'Submit' %>
+	</div>
+</form>

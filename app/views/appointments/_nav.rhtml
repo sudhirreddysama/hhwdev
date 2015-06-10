@@ -1,0 +1,6 @@
+<div class="tabs">
+	<%= tab 'Calendar', :action => :index, :id => nil %>
+	<%= tab 'New Appointment', :action => :new, :id => params[:id] if @appointment and @appointment.new_record? %>
+	<%= tab @appointment.name, {:id => @appointment.id}, :action => :view if @appointment and not @appointment.new_record? %>
+	<div class="clear"></div>
+</div>

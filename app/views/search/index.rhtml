@@ -1,0 +1,43 @@
+<%= render :partial => 'filter' %>
+<% if @appointments.empty? %>
+	<p>No appointments to display.</p>
+<% else %>
+	<%= will_paginate @appointments %>
+	<div>
+	<table>
+		<tr>
+			<th>Last Name</th>
+			<th>First Name</th>
+			<th>Phone</th>
+			<th>Municipality</th>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Location</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+		<% @appointments.each { |a| %>
+			<tr class="<%= 'cancelled' if a.cancelled %>">
+				<td><%= a.last_name %></td>
+				<td><%= a.first_name %></td>
+				<td><%= a.phone %></td>
+				<td><%= a.municipality %></td>
+				<td><%= a.when.strftime '%m/%d/%Y' rescue nil %></td>
+				<td><%= a.when.strftime '%I:%M %p' rescue nil %></td>
+				<td><%= a.location.name rescue nil %></td>
+				<% unless a.cancelled %>
+					<td><%= link_to 'View', :controller => :appointments, :action => :view, :id => a.id %></td>
+					<td><%= link_to 'Edit', :controller => :appointments, :action => :edit, :id => a.id %></td>
+					<td><%= link_to 'Cancel', :controller => :appointments, :action => :delete, :id => a.id %></td>
+				<% else %>
+					<td></td>
+					<td></td>
+					<td></td>
+				<% end %>
+			</tr>
+		<% } %>
+	</table>
+	</div>
+	<%= will_paginate @appointments %>
+<% end %>

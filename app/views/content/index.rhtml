@@ -1,0 +1,23 @@
+<h1>HHW Content</h1>
+<% content_for(:head) { %>
+	<%= javascript_include_tag 'tiny_mce/tiny_mce' %>
+	<script type="text/javascript">
+		tinyMCE.init({
+			mode : "textareas"
+		});
+	</script>
+<% } %>
+<% @contents.each { |@content| %>
+	<div style="margin: 2em;">
+		<% form_for(:content) { |f| %>
+			<%= hidden_field_tag :id, @content.id %>
+			<div class="field">
+				<label><%= @content.name %></label>
+				<%= f.text_area :text %>
+			</div>
+			<div class="field">
+				<%= submit_tag 'Update Content' %>
+			</div>	
+		<% } %>
+	</div>
+<% } %>

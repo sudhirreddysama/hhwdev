@@ -1,0 +1,5 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>Delete Schedule</h1>
+<%= render :partial => 'partial/errors', :locals => {:errors => @schedule.errors.full_messages} %> 
+<%= render :partial => 'partial/delete', :locals => {:name => @schedule.name} %>

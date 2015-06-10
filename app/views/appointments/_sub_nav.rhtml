@@ -1,0 +1,7 @@
+<div class="tabs2">
+	<%= tab 'View', :action => :view, :id => @appointment.id %>
+	<%= tab 'Edit', :action => :edit, :id => @appointment.id %>
+	<%= tab 'Cancel Appointment', :action => :delete, :id => @appointment.id %>
+	<%= tab 'Transfer', {:action => :transfer}, :id => @appointment.id %>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,16 @@
+APPOINTMENT:
+
+<%= @a.first_name %> <%= @a.last_name %>
+<%= @a.block.schedule.location.name %>
+<%= @a.block.schedule.date.strftime '%m/%d/%Y' %> <%= @a.block.time.strftime '%I:%M %p' %>
+
+
+USER COMMENTS:
+
+<%= @a.comments.blank? ? '(blank)' : @a.comments %>
+
+
+ADMIN COMMENTS:
+
+<%= @a.admin_comments.blank? ? '(blank)' : @a.admin_comments %>
+

@@ -1,0 +1,4 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<%= render :partial => 'partial/errors', :locals => {:errors => @user.errors.full_messages} %> 
+<%= render :partial => 'partial/delete', :locals => {:name => @user.username} %>

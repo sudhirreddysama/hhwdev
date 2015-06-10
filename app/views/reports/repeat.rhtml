@@ -1,0 +1,30 @@
+<%= render :partial => 'nav' %>
+<h1>HHW Repeat Users Report</h1>
+<%= render :partial => 'filter' %>
+<% if @repeat.empty? %>
+	<p>No Records Found!</p>
+<% else %>
+	<% @repeat.each { |times, people| %>
+		<h2>Users with <%= times %> Visits</h2>
+		<table>
+			<tr>
+				<th width="17%">Last Name</th>
+				<th width="17%">First Name</th>
+				<th width="17%">Phone</th>
+				<th width="17%">Email</th>
+				<th width="17%">Address</th>
+				<th width="15%">Muncipality</th>
+			</tr>
+			<% people.each { |p| %>
+				<tr>
+					<td><%= p.last_name %></td>
+					<td><%= p.first_name %></td>
+					<td><%= p.phone %></td>
+					<td><%= p.email %></td>
+					<td><%= p.address %></td>
+					<td><%= p.municipality %></td>
+				</tr>
+			<% } %>
+		</table>
+	<% } %>
+<% end %>

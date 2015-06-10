@@ -1,0 +1,22 @@
+<%= form_tag %>
+	<fieldset>
+		<legend>Filter Results</legend>
+		<%= render :partial => 'partial/errors', :locals => {:errors => @filter.errors} %>
+		<div class="field">
+			<label>Location:</label>
+			<%= select_tag 'filter[location_id]', options_for_select([[]] + Location.find(:all, :conditions => {:deleted => false}, :order => 'name').collect { |l| [l.name, l.id] }, @filter.location_id) %>
+		</div>
+		<div class="field">
+			<label>Date Range:</label>
+			<%= calendar_date_select_tag 'filter[begin]', @filter.begin %> to 
+			<%= calendar_date_select_tag 'filter[end]', @filter.end %>
+		</div>
+		<div class="field">
+			<label><%= radio_button_tag 'filter[date]', 'when', @filter.date == 'when' %> Date of Appointment</label>
+			<label><%= radio_button_tag 'filter[date]', 'created_at', @filter.date == 'created_at' %> Created Date</label>
+		</div>
+		<div class="field">
+			<%= submit_tag 'Submit' %> <%= submit_tag 'Export' %>
+		</div>
+	</fieldset>
+</form>

@@ -1,0 +1,108 @@
+<%= render :partial => 'partial/errors', :locals => {:errors => @appointment.errors.full_messages} %>
+<% form_for(:appointment) { |f| %>
+	<%= @appointment.block.schedule.location.questions if @appointment.new_record? and @current_user %>
+	<fieldset>
+		<legend>Appointment For:</legend>
+		<p>
+			<%= @appointment.block.schedule.date.strftime '%m/%d/%Y' %> <%= @appointment.block.time.strftime '%I:%M %p' %><br />
+			<%= @appointment.block.schedule.location.name %>
+		</p>
+	</fieldset>
+	<% if @current_user and @appointment.block.schedule.over? %>
+		<div class="field">
+			<label>Walk In:</label>
+			<%= f.check_box :walk_in %> Leave this checked if this is a walk-in customer.
+		</div>
+	<% end %>
+	<div class="field">
+		<label>Phone: <span class="required">*</span></label>
+		<%= f.text_field :area_code, :size => 3, :maxlength => 3, :value => @appointment.area_code.blank? ? '585' : @appointment.area_code %>
+		<%= f.text_field :phone_number, :size => 7, :maxlength => 7 %> x
+		<%= f.text_field :extension, :size => 5 %> Format: <span class="greybg">585</span> <span class="greybg">5555555</span> x <span class="greybg">EXT</span>
+	</div>
+	<% if @current_user %>
+		<div class="field">
+			<%= button_to_function 'Search for Previous Record', 'search_for_previous();' %> <span id="previous_count"></span>
+			<div class="help">Search will return the most recent record on file with this phone number.</div>
+		</div>
+	<% end %>
+	<div class="field">
+		<label>First Name: <span class="required">*</span></label>
+		<%= f.text_field :first_name %>
+	</div>
+	<div class="field">
+		<label>Last Name: <span class="required">*</span></label>
+		<%= f.text_field :last_name %>
+	</div>
+	<div class="field">
+		<label>Email: <% unless @current_user %><span class="required">*</span><% end %></label>
+		<%= f.text_field :email %>
+	</div>
+	<% unless @current_user %>
+		<div class="field">
+			<label>Confirm Email:</label>
+			<%= f.text_field :email_confirmation %>
+		</div>
+	<% end %>
+	<div class="field">
+		<label>Home Address: <span class="required">*</span></label>
+		<%= f.text_field :address %>
+	</div>
+	<div class="field">
+		<label>Suite / Apt. #:</label>
+		<%= f.text_field :address2 %>
+	</div>
+	<%= f.hidden_field :state, :value => 'NY' %>
+	<div class="field">
+		<label>Zip Code: <span class="required">*</span></label>
+		<%= f.text_field :zip, :size => 10, :maxlength => 10 %>
+	</div>
+	<div class="field">
+		<label>Municipality: <% unless @current_user and @current_user.admin_level >= 2 %><span class="required">*</span><% end %></label>
+		<%= render :partial => 'appointments/municipality_select', :locals => {:zip => @appointment.zip, :municipality => @appointment.municipality} %>
+		<div class="help">First enter a zip code to get a list of valid municipalities.</div>
+	</div>
+	<div class="field">
+		<label><%= 'Caller ' if @current_user %>Comments:</label>
+		<% if @current_user %>
+			<div class="help"><span class="required">NOTE:</span> These comments will be seen by the customer!</div>
+		<% end %>
+		<%= f.text_area :comments, :rows => 4 %>
+	</div>
+	<% if @current_user %>
+		<div class="field">
+			<label>Internal MC Customer Service Comments:</label>
+			<%= f.text_area :admin_comments, :rows => 4 %>
+			<div class="help">These comments will NOT be seen by the caller.</div>
+		</div>
+		<% if @current_user.admin_level > 0 and !@appointment.new_record? %>
+			<div class="field">
+				<label><%= f.check_box :flagged %> Flag this appointment</label>
+				<div class="help">If checked, all appointments with the same phone number will also be flagged. If unchecked, all will be unflagged.</div>
+			</div>
+			<div class="field">
+				<label>Signature Sheet Comment:</label>
+				<%= f.text_field :sig_comment %>
+				<div class="help">This line will show on the signature sheet with this comment.</div>
+			</div>
+		<% end %>
+	<% end %>
+	<div class="field">
+		<div class="help">You may be sent a follow up survey via email after your appointment. Your personal information will not be sold or given to any third party.</div>
+	</div>
+	<div class="field">
+		<%= submit_tag @appointment.new_record? ? 'Finalize Appointment' : 'Save Edits' %>
+	</div>
+<% } %>
+<% if @current_user %>
+	<script type="text/javascript">
+		function search_for_previous() {
+			new Ajax.Request(root_url + 'appointments/search_for_previous', {
+				parameters: {phone: $F('appointment_area_code') + $F('appointment_phone_number')}
+			});
+		}
+	</script>
+<% end %>
+<%= observe_field 'appointment_zip', :url => {:controller => :appointments, :action => :municipality_select},
+	:with => "'zip=' + $F('appointment_zip') + '&municipality=' + $F('appointment_municipality')",
+	:before => "$('appointment_municipality').disabled = true;", :frequency => 0.5 %>

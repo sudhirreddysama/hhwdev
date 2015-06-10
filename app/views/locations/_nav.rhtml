@@ -1,0 +1,6 @@
+<div class="tabs">
+	<%= tab 'Location List', :action => :index %>
+	<%= tab 'New Location', :action => :new %>
+	<%= tab(@location.name, {:id => @location.id}, :action => :edit) if @location and not @location.new_record? %>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,69 @@
+<% mult = @schedules[d].size > 1 %>
+<% d2 = d.to_s.tr('-', '_') %>
+<% if mult %>
+	<div id="<%= d %>">
+		<table class="cal_pop" cellspacing="0">
+			<tr><th colspan="3"><%= d.strftime '%m/%d/%Y' %></th></tr>
+			<tr><td colspan="3">There are multiple collections on this day. Please click the one you are interested in:</td></tr>
+			<tr>
+				<td colspan="3">
+					<% @schedules[d].each { |s| %>
+						<hr />
+						<div><span class="type_<%= s.schedule_type.id %>"><a href="#<%= d %>-<%= s.id %>" onclick="Control.Modal.close(); Control.Modal.open(ie_hax_<%= d2 %>_<%= s.id %>);" style="color: #fff;"><%= s.schedule_type.name %> : <%= s.location.name %></a></span></div>
+						<p><%= s.schedule_type.description %></p>
+					<% } %>
+				</td>
+			</tr>
+		</table>	
+	</div>
+<% end %>
+<% @schedules[d].each { |s| %>
+	<div id="<%= d %><%= "-#{s.id}" if mult %>" <% if mult %>class="sub-pop"<% end %>>
+		<table class="cal_pop" cellspacing="0">
+			<tr><th colspan="3"><%= d.strftime '%m/%d/%Y' %></th></tr>
+			<tr><th colspan="3">
+				<%= @current_user ? link_to(s.location.name + " (#{s.blocks.to_a.sum &:appointments_count}/#{s.blocks.to_a.sum &:slots})", :controller => :schedules, :action => :view, :id => s.id) : s.location.name %><br />
+				<%= s.location.address %> <%= s.location.address2 %><br />
+				<%= s.location.city %>, <%= s.location.zip %>
+			</th></tr>
+			<tr><td colspan="3" style="font-size: 1.2em; font-weight: bold; color: #900;"><%= s.begin.strftime '%I:%M %p' %> to <%= s.end.strftime '%I:%M %p' %></td></tr>
+			<% if s.interval.to_i > 0 and s.blocks.size > 0 %>
+				<tr><td colspan="3" style="font-weight: bold;">Pick a time below to make an appointment:</td></tr>			
+				<% unless s.description.blank? %>
+					<tr><td colspan="3"><%= s.description %></td></tr>
+				<% end %>
+				<% s.blocks.in_groups_of((s.blocks.size / 3.0).ceil).transpose.each { |r| %>
+					<tr>
+						<% r.each { |b| %>
+							<% if b %>
+								<td class="nobr <%= b.available? ? 'available' : 'unavailable' %>" width="33%">
+									<% label = b.time.strftime('%I:%M%p') + ("&nbsp;(#{b.appointments_count}/#{b.slots})" if @current_user).to_s %> 
+									<% if b.available? or (@current_user and @current_user.admin_level >= 1) %>
+										<% if params[:action] == 'transfer' %>
+											<%= link_to(label, {:new_block_id => b.id}, :method => :post) %>
+										<% else %>
+											<%= link_to(label, :action => (@current_user ? :new : :questions), :id => b.id) %>
+										<% end %>
+									<% else %>
+										<%= label %>
+									<% end %>
+								</td>
+							<% else %>
+								<td></td>
+							<% end %>
+						<% } %>
+					</tr>
+				<% } %>
+			<% else %>
+				<% unless s.description.blank? %>
+					<tr><td colspan="3"><%= s.description %></td></tr>
+				<% end %>
+			<% end %>
+		</table>
+	</div>
+	<% if mult %>
+		<script type="text/javascript">
+			ie_hax_<%= d2 %>_<%= s.id %> = document.getElementById('<%= d %>-<%= s.id %>').innerHTML;
+		</script>
+	<% end %>
+<% } %>

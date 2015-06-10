@@ -1,0 +1,37 @@
+<%= render :partial => 'nav' %>
+<h1>Schedule List</h1>
+<%= render :partial => 'filter' %>
+<% if @schedules.empty? %>
+	<p>No Records Found</p>
+<% else %>
+	<table>
+		<tr>
+			<th>Day</th>
+			<th>Date</th>
+			<th>Begins</th>
+			<th>Ends</th>
+			<th>Location</th>
+			<th></th>
+			<th></th>
+			<% if @current_user.admin_level >= 2 %>
+				<th></th>
+				<th></th>
+			<% end %>
+		</tr>
+		<% @schedules.each { |s| %>
+			<tr>
+				<td><%= s.date.strftime '%a' %></td>
+				<td><%= s.date.strftime '%m/%d/%Y' %></td>
+				<td><%= s.begin.strftime '%I:%M %p' %></td>
+				<td><%= s.end.strftime '%I:%M %p' %></td>
+				<td><%= s.location.name %></td>
+				<td><%= link_to 'View', :action => :view, :id => s.id %></td>
+				<td><%= link_to 'Sig.&nbsp;Sheet', :action => :signatures, :id => s.id %></td>
+				<% if @current_user.admin_level >= 2 %>
+					<td><%= link_to 'Edit', :action => :edit, :id => s.id %></td>
+					<td><%= link_to 'Delete', :action => :delete, :id => s.id %></td>
+				<% end %>
+			</tr>
+		<% } %>
+	</table>
+<% end %>

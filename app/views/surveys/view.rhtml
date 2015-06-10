@@ -1,0 +1,28 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>View Survey</h1>
+<p>
+	Total Sent: <%= @totals.taken.to_i %><br />
+	Total Taken: <%= @totals.sent.to_i %>
+</p>
+<table>
+	<tr>
+		<th width="98%">Question &amp; Answer</th>
+		<th width="1%">#</th>
+		<th width="1%">%</th>
+	</tr>
+	<% @survey.questions.each { |q| %>
+		<tr><th colspan="3"><%= q.text %></th></tr>
+		<% Survey::ANSWERS.each_with_index { |a, i| %>
+			<tr>
+				<td><%= a %></td>
+				<td><%= @results[q.id][i] rescue nil %></td>
+				<td><%= @percentages[q.id][i] rescue nil %></td>
+			</tr>
+		<% } %>
+	<% } %>
+</table>
+<% @comments.each { |a| %>
+	<p><%= link_to a.name, :controller => :appointments, :action => :view, :id => a.id %>:</p>
+	<p><%= nl2br_h a.survey_comment %></p>
+<% } %>

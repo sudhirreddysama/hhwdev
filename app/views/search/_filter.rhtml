@@ -1,0 +1,19 @@
+<%= form_tag %>
+	<fieldset>
+		<legend>Filter Results</legend>
+		<%= render :partial => 'partial/errors', :locals => {:errors => @filter.errors} %>
+		<div class="field">
+			<label>Search:</label>
+			<%= text_field_tag 'filter[search]', @filter.search %>
+			<div class="help">Search in first name, last name, phone (only numbers - no dashes or spaces) or email.</div>
+		</div>
+		<div class="field">
+			<label>Date Range:</label>
+			<%= calendar_date_select_tag 'filter[begin]', @filter.begin %> to 
+			<%= calendar_date_select_tag 'filter[end]', @filter.end %>
+		</div>
+		<div class="field">
+			<%= submit_tag 'Submit' %>
+		</div>
+	</fieldset>
+</form>

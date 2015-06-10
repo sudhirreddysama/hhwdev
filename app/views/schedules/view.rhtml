@@ -1,0 +1,139 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>View Schedule</h1>
+<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+<p>
+<%= @schedule.location.name %><br />
+<%= @schedule.date.strftime '%m/%d/%Y' %> <%= @schedule.begin.strftime '%I:%M %p' %> to <%= @schedule.end.strftime '%I:%M %p' %> 
+</p>
+<%= form_tag :action => :send_survey, :id => @schedule.id %>
+	<table id="appointments">
+		<tr>
+			<th>No&nbsp;Show</th>
+			<th>Time</th>
+			<th>Availability</th>
+			<th>First&nbsp;Name</th>
+			<th>Last&nbsp;Name</th>
+			<th>Phone</th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th><%= 'Survey' if @current_user.admin_level >= 1 %></th>
+		</tr>
+		<% @schedule.blocks.each { |b| %>
+			<% t = b.time.strftime '%I:%M %p' %>
+			<tr id="block_<%= b.id %>">
+				<th></th>
+				<th colspan="9"><%= t %>
+					<% if @current_user.admin_level >= 2 %>&nbsp;&nbsp;&nbsp;&nbsp;
+						<%= check_box_tag "enabled_#{b.id}", '1', !b.disabled, :onclick => 'blur();', :onchange => "toggle_block('#{b.id}');" %> (uncheck to disable)
+					<% end %>
+				</th>
+			</tr>
+			<% b.appointments.each { |a| %>
+				<% unless a.cancelled %>
+					<tr class="<%= 'cancelled' if a.cancelled %>" id="<%= a.id %>">
+						<td>
+							<% if @schedule.over? and !a.cancelled and !a.walk_in %>
+								<%= check_box_tag "no_show_#{a.id}", '1', a.no_show, :onclick => 'blur();', :onchange => "toggle_no_show('#{a.id}');" %>
+							<% else %>
+								N/A
+							<% end %>
+						</td>
+						<td><%= t %></td>
+						<td class="unavailable">TAKEN</td>
+						<td><%= a.first_name %></td>
+						<td><%= a.last_name %></td>
+						<td<% if a.flagged %> style="color: #a00; font-weight: bold;"<% end %>><%= a.phone %></td>
+						<% if a.cancelled %>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						<% else %>
+							<td><%= link_to 'View', :controller => :appointments, :action => :view, :id => a.id %></td>
+							<td><%= link_to 'Edit', :controller => :appointments, :action => :edit, :id => a.id %></td>
+							<td><%= link_to 'Cancel', :controller => :appointments, :action => :delete, :id => a.id %></td>
+							<td>
+								<% if @current_user.admin_level >= 1 %>
+									<% if a.email.blank? %>(no&nbsp;email)
+									<% elsif a.survey_taken %>(taken)
+									<% elsif a.survey_id %>(sent)
+									<% else %><%= check_box_tag 'recipients[]', a.id, false, (a.no_show ? {:style => 'display: none;', :disabled => true} : {}).merge(:id => "survey_#{a.id}", :class => 'survey') %>
+									<% end %>
+								<% end %>
+							</td>
+						<% end %>
+					</tr>
+				<% end %>
+			<% } %>
+			<% b.availability.times { %>
+				<tr>
+					<td></td>
+					<td><%= t %></td>
+					<td class="available">OPEN</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td colspan="4"><%= link_to 'Make Appointment', :controller => :appointments, :action => :new, :id => b.id %></td>
+				</tr>
+			<% } %>
+			<% if b.availability <= 0 and (@current_user.admin_level >= 1 or @schedule.over?) %>
+				<tr><td class="overbook" colspan="10"><%= link_to "Overbook / Add Walk In For #{t}", :controller => :appointments, :action => :new, :id => b.id %></td></tr>
+			<% end %>
+		<% } %>
+	</table>
+	<% if @current_user.admin_level >= 2 %>
+		<% if @schedule.over? %>
+			<fieldset>
+				<legend>Send Survey</legend>
+				<div class="field">
+					<%= button_to_function 'Select / Unselect All Recipients', 'select_unselect_all();' %>
+				</div>
+				<div class="field">
+					<label>Survey</label>
+					<%= select_tag 'survey_id', options_from_collection_for_select([{:name => 'Select Survey...'}] + Survey.find(:all), :id, :name) %>
+				</div>
+				<div class="field">
+					<%= submit_tag 'Send Survey' %>
+				</div>
+			</fieldset>
+			<script type="text/javascript">
+				function select_unselect_all() {
+					var chk = $('appointments').select('input.survey');
+					var all = true;
+					chk.each(function(c) { if(!c.disabled) all = all && c.checked });
+					chk.each(function(c) { c.checked = !all; });
+				}
+			</script>
+		<% end %>
+		<script type="text/javascript">
+			function toggle_block(id) {
+				$('block_' + id).addClassName('busy');
+				new Ajax.Request(root_url + 'schedules/toggle_block/' + id, {
+					onComplete: $('block_' + id).removeClassName('busy'),
+					parameters: {value: $F('enabled_' + id)}
+				});
+			}
+		</script>
+	<% end %>
+</form>
+<script type="text/javascript">
+	function toggle_no_show(id) {
+		$(id).addClassName('busy');
+		val = $F('no_show_' + id);
+		sur = $('survey_' + id);
+		if(val) {
+			sur.show();
+		}
+		else {
+			sur.hide();
+			sur.checked = false;
+			sur.disabled = true;
+		}
+		new Ajax.Request(root_url + 'schedules/toggle_no_show/' + id, {
+			onComplete: function() { $(id).removeClassName('busy'); },
+			parameters: {value: val}
+		});
+	}
+</script>

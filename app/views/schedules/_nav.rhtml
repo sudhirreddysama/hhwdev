@@ -1,0 +1,6 @@
+<div class="tabs">
+	<%= tab 'Schedule List', :action => :index %>
+	<%= tab 'New Schedule', :action => :new if @current_user.admin_level >= 2 %>
+	<%= tab(@schedule.name, {:id => @schedule.id}, :action => :view) if @schedule and not @schedule.new_record? %>
+	<div class="clear"></div>
+</div>

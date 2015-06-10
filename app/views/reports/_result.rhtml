@@ -1,0 +1,12 @@
+<tr>
+	<td><%= label %></td>
+	<td><%= r.appointment_total %></td>
+	<td><%= r.appointment_total.to_i - r.cancelled_total.to_i - r.no_show_total.to_i %></td>
+	<td><%= r.cancelled_total %></td>
+	<td><%= r.no_show_total %></td>
+	<td><%= r.email_total %></td>
+	<td><%= r.appointment_total.to_i - r.email_total.to_i %></td>
+	<td><%= r.appointment_total.to_i - r.online_total.to_i - r.walk_in.to_i %></td>
+	<td><%= r.online_total %></td>
+	<td><%= r.walk_in_total %></td>
+</tr>

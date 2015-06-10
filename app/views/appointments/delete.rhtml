@@ -1,0 +1,5 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>Cancel Appointment</h1>
+<%= render :partial => 'partial/errors', :locals => {:errors => @appointment.errors.full_messages} %> 
+<%= render :partial => 'partial/delete', :locals => {:name => @appointment.name} %>

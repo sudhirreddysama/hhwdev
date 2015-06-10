@@ -1,0 +1,11 @@
+<li id="question_<%= question.id %>" class="question">
+	<%= text_field_tag 'value', question.text, :id => "edit_#{question.id}", :size => 60, :onchange => remote_function(:url => {:action => :update_question, :id => question.id},
+		:with => "'text=' + $F('edit_#{question.id}')",
+		:before => "$('edit_#{question.id}').addClassName('busy');",
+		:complete => "$('edit_#{question.id}').removeClassName('busy');") %>
+	<%= link_to_remote 'remove', :url => {:action => :delete_question, :id => question.id},
+		:before => "$('edit_#{question.id}').addClassName('busy');",
+		:complete => "$('edit_#{question.id}').removeClassName('busy');",
+		:confirm => 'Are you sure you want to delete this question?'%>
+	<span class="moveable">reorder (click here &amp; drag)</span>
+</li>

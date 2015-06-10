@@ -1,0 +1,22 @@
+<%= render :partial => 'nav' %>
+<h1>Survey Listing</h1>
+<% if @surveys.empty? %>
+	<p>No Records Found!</p>
+<% else %>
+	<table>
+		<tr>
+			<th width="97%">Name</th>
+			<th width="1%"></th>
+			<th width="1%"></th>
+			<th width="1%"></th>
+		</tr>
+		<% @surveys.each { |s| %>
+			<tr>
+				<td><%= s.name %></td>
+				<td><%= link_to 'View', :action => :view, :id => s.id %></td>
+				<td><%= link_to 'Edit', :action => :edit, :id => s.id %></td>
+				<td><%= link_to 'Delete', :action => :delete, :id => s.id %></td>
+			</tr>
+		<% } %>
+	</table>
+<% end %>

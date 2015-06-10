@@ -1,0 +1,6 @@
+<div class="tabs">
+	<%= tab 'User List', :action => :index %>
+	<%= tab 'New User', :action => :new %>
+	<%= tab(@user.username, {:id => @user.id}, :action => :edit) if @user and not @user.new_record? %>
+	<div class="clear"></div>
+</div>

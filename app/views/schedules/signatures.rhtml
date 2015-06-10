@@ -1,0 +1,65 @@
+<html>
+	<!-- MEDIA LEFT .5in -->
+	<!-- MEDIA RIGHT .5in -->
+	<!-- MEDIA TOP .5in -->
+	<!-- MEDIA BOTTOM .5in -->
+	<!-- FOOTER RIGHT "page $PAGE of $PAGES" -->
+	<!-- FOOTER CENTER "* appointment made online" -->
+	<!-- FOOTER LEFT "(F) Flagged Appointment" -->
+	<!-- HEADER RIGHT "" -->
+	<!-- HEADER LEFT "" -->
+	<body>
+	<% first = true %>
+	<% @schedule.blocks.each { |b| %>
+		<% unless first %>
+			<!-- PAGE BREAK -->
+		<% else %>
+			<% first = false %>
+		<% end %>
+		<table width="100%" cellpadding="5" cellspacing="0" border="0">
+			<tr>
+				<td valign="top" width="10%"><b>
+					<%= @schedule.date.strftime '%m/%d/%Y' %><br /><img src="recycle.gif" height="60" width="60" /><br /><%= b.time.strftime '%I:%M%p' %></b></td>
+				<td valign="top" width="80%">
+					<center>
+						<b><font size="6">Monroe County</font><br /><br /><font size="5">Hazardous Household Waste</font><br /></b>	
+						I certify that I am a resident of Monroe County and that the waste, which I have brought for disposal, is
+						all household generated, and not from any commercial or industrial source.
+					</center>		
+				</td>
+				<td width="10%" valign="top" align="right"><img src="mclogo.gif" height="70" widht="70" /></td>
+			</tr>
+		</table>
+		
+		<table width="100%" cellpadding="5" cellspacing="0" border="1">
+			<tr>
+			<td width="33%"><b>Name/Address</b></td>
+			<td width="33%"><b>Signature</b></td>
+			<td width="34%"><b>License Plate #</b></td>
+			</tr>
+			<% b.appointments.each { |a| %>
+				<!-- NEED 6 -->
+				<tr>
+					<td>
+						<%= a.first_name %> <%= a.last_name %> (<%= a.previous_count %>) <%= '(F)' if a.flagged %> <%= '*' if a.online %><br />
+						<%= a.address %><br />
+						<%= a.municipality %>
+						<% unless a.sig_comment.blank? %>
+							<br /><b><%= h a.sig_comment %></b>
+						<% end %>
+					</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			<% } %>
+			<% 5.times { %>
+				<tr>
+					<td>&nbsp;<br />&nbsp;<br />&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			<% } %>
+		</table>
+	<% } %>
+	</body>
+</html>

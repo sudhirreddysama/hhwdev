@@ -1,0 +1,34 @@
+<h1>Household Hazardous Waste (HHW) Appointment Scheduler</h1>
+<h2>Welcome to the Household Hazardous Waste (HHW) online appointment scheduler</h2>
+<%= render :partial => 'progress', :locals => {:num => 1} %>
+<p class="errors">For your safety and ours, ALL HHW drop-offs are by <span style="text-decoration: underline;">APPOINTMENT ONLY!</span></p>
+<%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>
+<ul style="font-weight: bold">
+	<li>Residential drop-off is free of charge for Monroe County, NY residents.</li><br />
+	<li>Out of county residents, please call 585-753-7553.</li><br />
+	<li>Non-household customers (small business) must apply for participation in our conditionally exempt small quantity generator (CESQG) collection program. This includes business, not for profit groups, schools, churches and government agencies. For more information please contact our offices at 585-753-7553 or click on <a href="http://www.epa.gov/epaoswer/osw/gen_trans/generate.htm">(CESQG)</a> link. </li>
+</ul>
+<% form_for(:agreement) { |f| %>
+	
+	<div class="field">
+	 <label>Do you have a valid E-mail address?</label><br />
+		<label><%= f.radio_button :email, 'Yes' %> Yes</label>
+		<label><%= f.radio_button :email, 'No', :onclick => "alert('You cannot proceed without an E-mail address. Please contact our offices at 585-753-7600 (option #3) to schedule your HHW appointment. Office hours are from 8am - 4pm Monday - Friday.');" %> No</label>
+	</div>
+	
+	<div class="field">
+	 <label>Waste for disposal was not generated from a business, not for profit group, school, church, farm, government agency or any other non-residential source.</label><br />
+		<label><%= f.radio_button :home, 'Yes' %> Agree</label>
+		<label><%= f.radio_button :home, 'No', :onclick => "alert('For disposal of business waste contact 585 753-7553.');" %> Disagree</label>
+	</div>
+	
+	<div class="field">
+	 <label>I am a resident of Monroe County, NY.</label><br />
+		<label><%= f.radio_button :resident, 'Yes' %> Yes</label>
+		<label><%= f.radio_button :resident, 'No', :onclick => "alert('You must be a resident of Monroe County. Out of county residents please contact 585 753-7553 for disposal options.');" %> No</label>
+	</div>
+	
+	<div class="field">
+		<%= submit_tag 'Continue' %>
+	</div>
+<% } %>

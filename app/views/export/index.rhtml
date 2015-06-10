@@ -1,0 +1,26 @@
+<h1>HHW Export</h1>
+<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+<%= form_tag %>
+	<table>
+		<tr>
+			<th>Export?</th>
+			<th>Location Name</th>
+			<th>Last Export</th>
+		</tr>
+		<% @locations.each { |l| %>
+			<tr>
+				<td><%= check_box_tag 'locations[]', l.id %></td>
+				<td><%= l.name %></td>
+				<td><%= l.last_export.strftime '%m/%d/%Y %I:%M %p' rescue nil %></td>
+			</tr>
+		<% } %>
+	</table>
+	<div class="field">
+		<label>Export Appointments Since:</label>
+		<%= calendar_date_select_tag 'since', nil, :time => true %>
+		<div class="help">Leave blank to export since the last exported date.</div>
+	</div>
+	<div class="field">
+		<%= submit_tag 'Export Appointments' %>
+	</div>
+</form>

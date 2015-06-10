@@ -1,0 +1,22 @@
+<%= render :partial => 'nav' %>
+<h1>Location List</h1>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Address</th>
+		<th>City</th>
+		<th>Zip</th>
+		<th></th>
+		<th></th>
+	</tr>
+	<% @locations.each { |l| %>
+		<tr>
+			<td><%= l.name %></td>
+			<td><%= l.address %></td>
+			<td><%= l.city %></td>
+			<td><%= l.zip %></td>
+			<td><%= link_to 'Edit', :action => :edit, :id => l.id %></td>
+			<td><%= link_to 'Delete', :action => :delete, :id => l.id %></td>
+		</tr>
+	<% } %>
+</table>

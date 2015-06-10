@@ -1,0 +1,71 @@
+<%= render :partial => 'nav' %>
+<h1>HHW Appointments Report</h1>
+<% if false %>
+	<%= link_to 'Number of appointments per week report', :action => :perweek %>
+<% end %>
+<%= render :partial => 'filter' %>
+<p>Jump To: <a href="#total">Totals</a> | <a href="#weekday">By Day of Week</a> | <a href="#hour">By Hour of Day</a> | <a href="#zip">By User Zip Code</a> | <a href="#municipality">By Municipality</a></p>
+
+<p>
+total - Total appointments made.<br />
+visit - Total visits (appointments honored and not cancelled).<br />
+cancel - Total appointments cancelled.<br />
+noshow - Total appointments not honored.<br />
+email - Total appointments made with an email address.<br />
+noemail - Total appointments made without an email address.<br />
+call - Total appointments called in (made by staff).<br />
+web - Total appointments made online (by end users).<br />
+walk - Total walk-in apointments.<br />
+</p>
+
+<% tot = @total.fetch_hash %>
+<% if tot %>
+	<h2 id="total">Totals</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<%= render(:partial => 'result', :locals => {:r => tot, :label => 'All'}) %>
+	</table>
+	<h2 id="weekday">By Day of Week</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<% while r = @weekday.fetch_hash %>
+			<%= render(:partial => 'result', :locals => {:r => r, :label => (r.dayname ? r.dayname : 'unknown')}) %>
+		<% end %>
+	</table>
+	<h2 id="hour">By Hour of Day</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<% while r = @hour.fetch_hash %>
+			<%= render(:partial => 'result', :locals => {:r => r, :label => (r.hour ? Time.utc(2000, 1, 1, r.hour.to_i).strftime('%I:%M%p') : 'unknown')}) %>
+		<% end %>
+	</table>
+	<h2 id="zip">By User Zip Code</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<% while r = @zip.fetch_hash %>
+			<%= render(:partial => 'result', :locals => {:r => r, :label => (r['zip'].blank? ? 'unknown' : r['zip'])}) %>
+		<% end %>
+	</table>
+	<h2 id="muncipality">By Municipality</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<% while r = @municipality.fetch_hash %>
+			<%= render(:partial => 'result', :locals => {:r => r, :label => (r.municipality.blank? ? 'unknown' : r.municipality)}) %>
+		<% end %>
+	</table>
+	<h2 id="yearweek">By Year/Week</h2>
+	<table>
+		<%= render :partial => 'header' %>
+		<% while r = @yearweek.fetch_hash %>
+			<% lbl = 'unknown' %>
+			<% unless r.yearweek.blank? or r.yearweek == 'W' %>
+				<% d = Date.new(r.yearweek[0,4].to_i, 1, 1) %>
+				<% yw = r.yearweek[4,2].to_i %>
+				<% lbl = "(#{yw})&nbsp;" + (d - d.wday).advance(:weeks => yw).strftime('%m/%d/%Y') %>
+			<% end %>
+			<%= render(:partial => 'result', :locals => {:r => r, :label => lbl}) %>
+		<% end %>
+	</table>
+<% else %>
+	<p>No records found!</p>
+<% end %>

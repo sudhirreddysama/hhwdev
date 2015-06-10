@@ -1,0 +1,11 @@
+<%= render :partial => 'nav' %>
+<%= render :partial => 'sub_nav' %>
+<h1>Edit Questions</h1>
+<ol id="question_list">
+	<%= render :partial => 'question', :collection => @survey.questions %>
+	<li id="new"><%= form_remote_tag :url => {:action => :new_question, :id => @survey.id},
+		:before => "$('new_text').addClassName('busy');",
+		:complete => "$('new_text').removeClassName('busy');" %>
+		<%= text_field_tag 'text', nil, :size => 60, :id => 'new_text' %><%= submit_tag 'Add Question' %></form></li>
+</ol>
+<%= sortable_element 'question_list', :url => {:action => :order_questions, :id => @survey.id}, :only => 'question', :handle => 'moveable' %>

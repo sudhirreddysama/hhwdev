@@ -1,0 +1,52 @@
+<%= render :partial => 'partial/errors', :locals => {:errors => @location.errors.full_messages} %>
+<% form_for(:location) { |f| %>
+	<div class="field">
+		<label>Name: <span class="required">*</span></label>
+		<%= f.text_field :name %>
+	</div>
+	<div class="field">
+		<label>Address: <span class="required">*</span></label>
+		<%= f.text_field :address %><br />
+		<%= f.text_field :address2 %>
+	</div>
+	<div class="field">
+		<label>City: <span class="required">*</span></label>
+		<%= f.text_field :city %>
+	</div>
+	<div class="field">
+		<label>State: <span class="required">*</span></label>
+		<%= f.select :state, USA_STATES, :selected => (@location.state or 'NY') %>
+	</div>
+	<div class="field">
+		<label>Zip Code: <span class="required">*</span></label>
+		<%= f.text_field :zip %>
+	</div>
+	<div class="field">
+		<label>Email Confirmation:</label>
+		<%= f.text_area :confirmation, :style => 'width: 100%;' %>
+	</div>
+	<% content_for(:head) { %>
+		<%= javascript_include_tag 'tiny_mce/tiny_mce' %>
+		<script type="text/javascript">
+			tinyMCE.init({
+				mode : "exact",
+				elements: "location_questions,location_terms",
+				theme: "advanced"
+			});
+		</script>
+	<% } %>
+	<div class="field">
+		<label>Questions:</label>
+		<%= f.text_area :questions, :style => 'width: 100%;' %>
+	</div>
+	<div class="field">
+		<label><%= f.check_box :use_terms %> Display custom terms &amp; conditions on the public side (instead of the default).</label>
+	</div>
+	<div class="field">
+		<label>Terms &amp; Conditions:</label>
+		<%= f.text_area :terms, :style => 'width: 100%;' %>
+	</div>
+	<div class="field">
+		<%= submit_tag 'Submit' %>
+	</div>
+<% } %>

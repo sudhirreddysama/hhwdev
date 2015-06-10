@@ -1,0 +1,97 @@
+<h1><span class="eco"><b>eco</b>park</span> Special Collection Calendar and Household Hazardous Waste (HHW) Appointment Scheduler</h1>
+<%= render :partial => 'progress', :locals => {:num => 3} %>
+<%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>
+<% form_for(:agreement) { |f| %>
+<% unless @block.schedule.location.use_terms %>
+	<% quick_fix =  @block.schedule.location_id != 1 %>
+	<h2>Please certify that you have read and understand the following information before proceeding with your HHW appointment:</h2>
+	
+	<p style="font-weight: bold">
+		Latex Paint = I understand Latex paint 1/3 gallon or less will not be accepted. 
+		1/3 gallon or less, should be dried out with absorbent material (kitty litter) mix, allow to dry and disposed of in household trash with lid left off. 
+		<span style="text-decoration: underline;">NO empty or dried up paint will be accepted</span>:
+	</p>
+	<div class="field">
+		<label><%= f.radio_button :paint, 'Yes' %> Yes</label>
+		<label><%= f.radio_button :paint, 'No' %> No</label>
+	</div>
+	
+	<p style="font-weight: bold">
+		I do not have more than 30 gallons of liquid products or 75 pounds of solid waste materials.
+		If more than the above acceptable quantities please call our office at 585-753-7600 (option #3):
+	</p>
+	<div class="field">
+		<label><%= f.radio_button :quantity, 'Yes' %> Yes</label>
+		<label><%= f.radio_button :quantity, 'No' %> No</label>
+	</div>
+	
+	<p style="font-weight: bold">
+		I do not have any containers larger than 5 gallons (e.g. driveway sealer container = 5 gallons).
+		Iif so please contact our office at 585-753-7600 (option #3):
+	</p>
+	<div class="field">
+		<label><%= f.radio_button :container, 'Yes' %> Yes</label>
+		<label><%= f.radio_button :container, 'No' %> No</label>
+	</div>
+	
+	<fieldset class="disclaimer" style="border: 2px solid #00dd00;">
+		<legend>Acceptable Items</legend>
+		<ul>
+			<li>Monroe County residents can bring up to 30 gallons of liquid and 75 pounds of solid HHW per appointment without charge. No 55-gallon drums will be accepted.</li>
+			<li><b>Latex Paint</b> 1/3 can or more (for 1/3 can or less: see instructions below)</li>
+			<li>Oil based Wood Stains and Preservatives</li>
+			<li>Automotive Fluids (antifreeze; brake, power steering and transmission fluids)</li>
+			<li>Pesticides and Fertilizers</li>
+			<li>Flammable Products (gasoline, kerosene, thinners, strippers, solvents, glues, etc.)</li>
+			<li>Household Cleaners (soaps, waxes, drain cleaners, etc.)</li>
+			<li>Driveway Sealer</li>
+			<% unless quick_fix %>
+				<li>Propane Tanks (1 and 20-pound ONLY)</li>
+			<% end %>
+			<li>Pool and Photo Chemicals</li>
+			<li>Rechargeable (Ni-Cad) and Button Batteries</li>
+			<li>Mercury (thermometers, thermostats)</li>
+			<li>Syringes/Sharps (safely packaged in puncture proof container, i.e. 2 Litter soda bottle)</li>
+			<% unless quick_fix %>
+				<li>Cooking Oil/Cooking Grease</li>
+			<% end %>
+		</ul>
+		<div class="field">
+			<label><%= f.check_box :acceptable, {}, 'Yes' %> I have read and understand acceptable material list.</label>
+		</div>
+	</fieldset>
+	<fieldset class="disclaimer" style="border: 2px solid #dd0000;">
+		<legend>Unacceptable Items</legend>
+		<ul>
+			<li>1/3 can or Less of Latex Paint (for 1/3 can or less of latex paint: discard lid, add kitty litter, let dry, place can in trash. Less than 1/3 can will not be accepted)</li>
+			<li>Cans with Dried Paint? (remove lid and place in trash)</li>
+			<li>Used Motor Oil and Lead Acid Batteries (contact service station or retailer)</li>
+			<li>Empty Containers (place in trash or recycle)</li>
+			<li>Smoke Detectors (trash or contact manufacturer)</li>
+			<li>Everyday Alkaline Batteries (place in trash)</li>
+			<% if quick_fix %>
+				<li>Propane Tanks (accepted at permanent HHW facility ONLY)</li>
+				<li>Cooking Oil/Cooking Grease (accepted at permanent HHW facility ONLY)</li>
+			<% end %>
+			<li>Glazing/Spackle and Joint Compounds (trash)</li>
+			<li>Asbestos (see Yellow Pages under "Asbestos Abatement")</li>	
+			<li>Products intended for industrial use</li>
+			<li>Explosives/Ammunition/Black/Smokeless Powder (Call 9-1-1)</li>
+			<li>Shock Sensitive Materials (i.e. crystallized ethers, picric acid) (Call 9-1-1)</li>
+		</ul>
+		<div class="field">
+			<label><%= f.check_box :unacceptable, {}, 'Yes' %> I have read and understand unacceptable material list.</label>
+		</div>
+	</fieldset>
+<% else %>
+	<%= @block.schedule.location.terms %>
+	<div class="field" style="padding: 1em; background-color: #f8f8f8; margin: 1em 0;">
+		<%=  %>
+		<label><%= f.check_box :agree, {}, 'yes' %> I have read and agree with the terms &amp; conditions.</label>
+	</div>
+<% end %>
+	<div class="field">
+		<%= submit_tag 'Proceed with on-line appointment' %>
+		<%= link_to 'Cancel appointment process', :action => :index, :id => nil %>
+	</div>
+<% } %>
