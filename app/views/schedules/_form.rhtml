@@ -70,10 +70,10 @@
 				b = new Date(p.begin);
 				e = new Date(p.end);
 				set_select($('schedule_begin_4i'), b.toString('hh'));
-				set_select($('schedule_begin_5i'), b.getMinutes().toString());
+				set_select($('schedule_begin_5i'), b.toString('mm').toString());
 				set_select($('schedule_begin_6i'), (b.toString('t') == 'A') ? '0' : '1');
 				set_select($('schedule_end_4i'), e.toString('hh'));
-				set_select($('schedule_end_5i'), e.getMinutes().toString());
+				set_select($('schedule_end_5i'), e.toString('mm').toString());
 				set_select($('schedule_end_6i'), (e.toString('t') == 'A') ? '0' : '1');
 				set_select($('schedule_interval'), p.interval.toString());
 				$('schedule_slots').value = p.slots;
