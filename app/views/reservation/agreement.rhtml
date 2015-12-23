@@ -1,4 +1,4 @@
-<h1><span class="eco"><b>eco</b>park</span> Special Collection Calendar and Household Hazardous Waste (HHW) Appointment Scheduler</h1>
+<h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler</h1>
 <%= render :partial => 'progress', :locals => {:num => 3} %>
 <%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>
 <% form_for(:agreement) { |f| %>
@@ -27,7 +27,7 @@
 	
 	<p style="font-weight: bold">
 		I do not have any containers larger than 5 gallons (e.g. driveway sealer container = 5 gallons).
-		Iif so please contact our office at 585-753-7600 (option #3):
+		If so please contact our office at 585-753-7600 (option #3):
 	</p>
 	<div class="field">
 		<label><%= f.radio_button :container, 'Yes' %> Yes</label>
@@ -51,7 +51,7 @@
 			<li>Pool and Photo Chemicals</li>
 			<li>Rechargeable (Ni-Cad) and Button Batteries</li>
 			<li>Mercury (thermometers, thermostats)</li>
-			<li>Syringes/Sharps (safely packaged in puncture proof container, i.e. 2 Litter soda bottle)</li>
+			<li>Syringes/Sharps (safely packaged in puncture proof container, i.e. 2 Liter soda bottle)</li>
 			<% unless quick_fix %>
 				<li>Cooking Oil/Cooking Grease</li>
 			<% end %>
