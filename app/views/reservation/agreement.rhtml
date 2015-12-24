@@ -1,4 +1,5 @@
 <h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler</h1>
+<div style="font-size: 85%; float: left; margin: .5em;">You are making an appointment for <b><%= @block.schedule.date.strftime '%m/%d/%Y' %> <%= @block.time.strftime('%I:%M %p') %></b> at <b><%= @block.schedule.location.name %></b></div>
 <%= render :partial => 'progress', :locals => {:num => 3} %>
 <%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>
 <% form_for(:agreement) { |f| %>

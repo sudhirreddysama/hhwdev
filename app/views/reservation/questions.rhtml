@@ -1,5 +1,6 @@
 <h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler</h1>
 <h2>Welcome to the Household Hazardous Waste (HHW) online appointment scheduler</h2>
+<div style="font-size: 85%; float: left; margin: .5em;">You are making an appointment for <b><%= @block.schedule.date.strftime '%m/%d/%Y' %> <%= @block.time.strftime('%I:%M %p') %></b> at <b><%= @block.schedule.location.name %></b></div>
 <%= render :partial => 'progress', :locals => {:num => 2} %>
 <p class="errors">For your safety and ours, ALL HHW drop-offs are by <span style="text-decoration: underline;">APPOINTMENT ONLY!</span></p>
 <%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>

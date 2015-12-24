@@ -9,6 +9,7 @@ class ReservationController < ApplicationController
 	
 	def questions
 		@agreement = params[:agreement] || {}
+		@block = Block.find params[:id], :include => {:schedule => :location}
 		if request.post? 
 			@agreement.errors = ['You must answer &quot;yes&quot; or &quot;agree&quot; to every question before proceeding.'] if @agreement.size < 3 or @agreement.find { |k, a| a != 'Yes' }
 			redirect_to :action => :agreement, :id => params[:id] if @agreement.errors.nil?
