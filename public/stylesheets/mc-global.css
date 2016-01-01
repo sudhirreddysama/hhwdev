@@ -80,7 +80,7 @@ Use as global stylesheet.
 	
 /*--- Rules for Header ---*/
 
-#header {position: relative; background: #194e84 url(../i-p/masthead.jpg) top left no-repeat; height: 98px; border-bottom: 1px solid #fff;}
+#header {position: relative; background: #fff url(../i-p/masthead-main.jpg) top left no-repeat; height: 98px; border-bottom: 1px solid #fff;}
 #navbar {background: url(../i-p/tabs-bg.gif) top left repeat-x;}
 #login {background-color: #000; color: #fff; border-bottom: 1px solid #fff;}
 #urhere {background: #fff; clear: both; text-align: left; font-size: 80%; font-weight: normal;}
