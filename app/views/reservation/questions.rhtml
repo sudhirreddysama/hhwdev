@@ -6,27 +6,29 @@
 <%= render :partial => 'partial/errors', :locals => {:errors => @agreement.errors} %>
 <ul style="font-weight: bold">
 	<li>Residential drop-off is free of charge for Monroe County, NY residents.</li><br />
-	<li>Out of county residents, please call 585-753-7553.</li><br />
-	<li>Non-household customers (small business) must apply for participation in our conditionally exempt small quantity generator (CESQG) collection program. This includes business, not for profit groups, schools, churches and government agencies. For more information please contact our offices at 585-753-7553 or click on <a href="/files/cesqg-form.xls">(CESQG)</a> link. </li>
+	<li>Out-of-county residents, please <a href="/des-cesqg.php#outofcounty">click here to view and complete the out-of-county Hazardous Household Waste form.</a></li><br />
+	<li>Non-household customers (small business) must apply for participation in our conditionally exempt small quantity generator (CESQG) collection program. This includes business, not for profit groups, schools, churches and government agencies. <a href="/des-cesqg.php">Click here for more information.</a></li>
 </ul>
 <% form_for(:agreement) { |f| %>
 	
-	<div class="field">
-	 <label>Do you have a valid E-mail address?</label><br />
-		<label><%= f.radio_button :email, 'Yes' %> Yes</label>
-		<label><%= f.radio_button :email, 'No', :onclick => "alert('You cannot proceed without an E-mail address. Please contact our offices at 585-753-7600 (option #3) to schedule your HHW appointment. Office hours are from 8am - 4pm Monday - Friday.');" %> No</label>
-	</div>
+	<% if false %>
+		<div class="field">
+		 <label>Do you have a valid E-mail address?</label><br />
+			<label><%= f.radio_button :email, 'Yes' %> Yes</label>
+			<label><%= f.radio_button :email, 'No', :onclick => "alert('You cannot proceed without an E-mail address. Please contact our offices at 585-753-7600 (option #3) to schedule your HHW appointment. Office hours are from 8am - 4pm Monday - Friday.');" %> No</label>
+		</div>
+	<% end %>
 	
 	<div class="field">
 	 <label>Waste for disposal was not generated from a business, not for profit group, school, church, farm, government agency or any other non-residential source.</label><br />
 		<label><%= f.radio_button :home, 'Yes' %> Agree</label>
-		<label><%= f.radio_button :home, 'No', :onclick => "alert('For disposal of business waste contact 585 753-7553.');" %> Disagree</label>
+		<label><%= f.radio_button :home, 'No', :onclick => '' %> Disagree: <a href="/des-cesqg.php">View the Conditionally Exempt Small Quantity Generator (CESQG) Collection Program</a></label>
 	</div>
 	
 	<div class="field">
 	 <label>I am a resident of Monroe County, NY.</label><br />
 		<label><%= f.radio_button :resident, 'Yes' %> Yes</label>
-		<label><%= f.radio_button :resident, 'No', :onclick => "alert('You must be a resident of Monroe County. Out of county residents please contact 585 753-7553 for disposal options.');" %> No</label>
+		<label><%= f.radio_button :resident, 'No', :onclick => '' %> No: <a href="/des-cesqg.php#outofcounty">Complete the Out-of-County HHW Form</a></label>
 	</div>
 	
 	<div class="field">
