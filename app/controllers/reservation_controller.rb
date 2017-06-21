@@ -23,7 +23,7 @@ class ReservationController < ApplicationController
 			@begin = Time.now.to_date
 		end
 		@objs = Schedule.find(:all, :include => [:blocks, :location], :order => 'locations.city, locations.name, schedules.date, blocks.time',
-			:conditions => ['concat(schedules.date, "T", schedules.end) > now() and schedules.date >= ? and schedules.date < ? and schedules.deleted = 0 and ((blocks.slots > blocks.appointments_count and blocks.disabled = 0) or schedules.interval = 0)', @begin, @end])
+			:conditions => ['schedule_type_id != 4 and concat(schedules.date, "T", schedules.end) > now() and schedules.date >= ? and schedules.date < ? and schedules.deleted = 0 and ((blocks.slots > blocks.appointments_count and blocks.disabled = 0) or schedules.interval = 0)', @begin, @end])
 			
 		@schedules = @objs.group_by &:date
 			

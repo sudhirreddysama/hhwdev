@@ -3,14 +3,25 @@
 	<%= render :partial => 'sub_nav' %>
 	<h1>Transfer Appointment</h1>
 <% else %>
-	<h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler and Pharmaceutical Collection Calendar</h1>
+	<h1><span class="eco"><b>eco</b>park</span> Household Hazardous Waste (HHW) Appointment Scheduler</h1>
 <% end %>
+<style>
+	#also { float: left; font-size: 85%; margin: .5em .5em .5em 0; }	
+	#also a { display: inline-block; background-color: #194e84; border-radius: 3px; color: #fff; margin: -2px 0; padding: 2px 5px; }
+	#also a:hover { text-decoration: none; background-color: #5e83a9; }
+</style>
+<div id="also">
+	See Also:
+	<a href="/ecopark" target="_blank">General ecopark Info</a>
+	<a href="/ecopark/pharmaceutical.php" target="_blank">Pharmaceutical Collections</a>
+</div>
 <%= render :partial => 'progress', :locals => {:num => 1} unless @current_user %>
 <h2>Choose a Date</h2>
 <p>
-	The calendar displays all <span class="eco"><b>eco</b>park</span> HHW events, mobile HHW collections held at municipal highway departments and scheduled pharmaceutical collections. Appointments are only required to drop off HHW items.</p>  
+	The calendar displays all <span class="eco"><b>eco</b>park</span> HHW events and mobile HHW collections held at municipal highway departments. Appointments are only required to drop off HHW items.</p>  
 <p>
-Calendar Instructions: Click on a highlighted date in the calendar. Click again to choose the service you would like (red - for pharmaceutical disposal, green to make an <span class="eco"><b>eco</b>park</span> HHW appointment or (when available) purple for a mobile HHW appointment). You will then see details (times, address, etc.) of your choice. For HHW appointments, you must click on an available time slot to make a required appointment.
+Calendar Instructions: Click on a highlighted date in the calendar. Click again to choose the service you would like (green to make an <span class="eco"><b>eco</b>park</span> HHW appointment or (when available) purple for a mobile HHW appointment). 
+You will then see details (times, address, etc.) of your choice. For HHW appointments, you must click on an available time slot to make a required appointment.
 	<% if @current_user %>
 		Collection dates that no longer have available slots are "x"d out.
 	<% end %>
@@ -44,26 +55,28 @@ Calendar Instructions: Click on a highlighted date in the calendar. Click again 
 		<div class="clear"></div>
 	</div>
 </div>
-<h2>Daily Pharmaceutical Drop-offs</h2>
-<h3>Local Police Stations:</h3>
-<ul>
-<li><strong>Brighton Police Department</strong> (2300 Elmwood Ave. 14618) - Daily collections (M-F) 8 a.m. to 6 p.m. (excluding holidays)</li>
-<li><strong>Brockport Police Department</strong> (One Clinton St. 14420) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
-<li><strong>East Rochester Police Department</strong> (317 Main St. 14445) - Daily collections (M-F) 8:30 a.m. to 6 p.m. (excluding holidays)</li>
-<li><strong>Fairport Police Department</strong> (31 S. Main St. 14450) - Daily Collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
-<li><strong>Gates Police Department</strong> (1605 Buffalo Rd. 14624) - Daily collections (M-F) 8 a.m. to 5 p.m. (excluding holidays)</li>
-<li><strong>Greece Police Department</strong> (400 Island Cottage Rd. 14612) - Daily collections (M-F) 8 a.m. to 5 p.m. (excluding holidays) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Note: Sharps/needles not accepted.</strong></li>
-<li><strong>Irondequoit Police Department</strong> (1300 Titus Ave. 14617) - Daily collections (M-Sat.) 8 a.m. to 11 p.m.</li>
-<li><strong>Ogden Police Department</strong> (269 Ogden Center Rd. 14559) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
-<li><strong>Webster Police Department</strong> (1000 Ridge Rd. 14580) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
-</ul>
-<h3>Monroe County Sheriff's Office &amp; Substations:</h3>
-<ul>
-<li><strong>Sheriff’s Office (A Zone)</strong> (789 Linden Ave. 14625) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
-<li><strong>Sheriff’s Office (B Zone)</strong> (245 Summit Point Dr. 14467) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
-<li><strong>Sheriff’s Office (C Zone)</strong> (2330  Union St. 14559) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
-<li><strong>Sheriff’s Office (Property, basement)</strong> (130 S. Plymouth Ave. 14614) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
-</ul>
+<% if(false): %>
+	<h2>Daily Pharmaceutical Drop-offs</h2>
+	<h3>Local Police Stations:</h3>
+	<ul>
+	<li><strong>Brighton Police Department</strong> (2300 Elmwood Ave. 14618) - Daily collections (M-F) 8 a.m. to 6 p.m. (excluding holidays)</li>
+	<li><strong>Brockport Police Department</strong> (One Clinton St. 14420) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
+	<li><strong>East Rochester Police Department</strong> (317 Main St. 14445) - Daily collections (M-F) 8:30 a.m. to 6 p.m. (excluding holidays)</li>
+	<li><strong>Fairport Police Department</strong> (31 S. Main St. 14450) - Daily Collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+	<li><strong>Gates Police Department</strong> (1605 Buffalo Rd. 14624) - Daily collections (M-F) 8 a.m. to 5 p.m. (excluding holidays)</li>
+	<li><strong>Greece Police Department</strong> (400 Island Cottage Rd. 14612) - Daily collections (M-F) 8 a.m. to 5 p.m. (excluding holidays) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Note: Sharps/needles not accepted.</strong></li>
+	<li><strong>Irondequoit Police Department</strong> (1300 Titus Ave. 14617) - Daily collections (M-Sat.) 8 a.m. to 11 p.m.</li>
+	<li><strong>Ogden Police Department</strong> (269 Ogden Center Rd. 14559) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+	<li><strong>Webster Police Department</strong> (1000 Ridge Rd. 14580) - Daily collections (M-F) 8:30 a.m. to 4:30 p.m. (excluding holidays)</li>
+	</ul>
+	<h3>Monroe County Sheriff's Office &amp; Substations:</h3>
+	<ul>
+	<li><strong>Sheriff’s Office (A Zone)</strong> (789 Linden Ave. 14625) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
+	<li><strong>Sheriff’s Office (B Zone)</strong> (245 Summit Point Dr. 14467) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
+	<li><strong>Sheriff’s Office (C Zone)</strong> (2330  Union St. 14559) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
+	<li><strong>Sheriff’s Office (Property, basement)</strong> (130 S. Plymouth Ave. 14614) - Daily collections (M-F) 8 a.m. to 4 p.m. (excluding holidays)</li>
+	</ul>
+<% end %>
 <% unless @objs.empty? %>
 	<h2>List By Municipality</h2>
 	<%

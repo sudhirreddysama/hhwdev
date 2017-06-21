@@ -27,7 +27,7 @@ class Notifier < ActionMailer::Base
 
 	def recipients *args
 		if RAILS_ENV == 'development'
-			super 'jesse@thinkcivic.com'
+			super 'jessesternberg@monroecounty.gov'
 		else
 			super *args
 		end
