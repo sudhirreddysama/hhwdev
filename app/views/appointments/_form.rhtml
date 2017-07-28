@@ -91,6 +91,9 @@
 		<div class="help">You may be sent a follow up survey via email after your appointment. Your personal information will not be sold or given to any third party.</div>
 	</div>
 	<div class="field">
+		<label><%= f.check_box :email_signup %> I'd like to receive periodic recycling updates from Monroe County</label>
+	</div>
+	<div class="field">
 		<%= submit_tag @appointment.new_record? ? 'Finalize Appointment' : 'Save Edits' %>
 	</div>
 <% } %>

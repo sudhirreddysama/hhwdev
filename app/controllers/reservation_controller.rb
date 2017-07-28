@@ -53,6 +53,7 @@ class ReservationController < ApplicationController
 				:location_id => @block.schedule.location_id,
 				:when => Time.utc(d.year, d.month, d.day, t.hour, t.min, 0)
 			})
+			@appointment.email_signup = true
 			@appointment.attributes = params[:appointment]
 			if request.post? and @appointment.save
 				@block.update_attribute :appointments_count, @block.appointments_count + 1
