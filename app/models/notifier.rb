@@ -12,7 +12,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def comments a
-		from FROM
+		from a.email.blank? ? 'noemail@monroecounty.gov' : a.email
 		recipients FROM
 		subject 'HHW Appointment Comment Notification : ' + a.location.name
 		body :a => a
