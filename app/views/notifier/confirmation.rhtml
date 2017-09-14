@@ -28,6 +28,13 @@ Your Comments:
 <%= @a.comments.blank? ? '(blank)' : @a.comments %>
 
 
+Click the link below to cancel your appointment:
+
+https://www.monroecounty.gov/hhw/reservation/cancel/<%= @a.id %>/<%= @a.email_key %>
+
+
 Other Information:
 
 <%= l.confirmation.blank? ? '(none)' : l.confirmation %>
+
+

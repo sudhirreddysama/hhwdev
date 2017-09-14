@@ -1,6 +1,6 @@
 class ReservationController < ApplicationController
 	
-	before_filter :users_get_outa_here
+	before_filter :users_get_outa_here, :except => :cancel
 	def users_get_outa_here
 		if load_current_user
 			redirect_to :controller => :appointments, :action => :index, :id => nil
@@ -69,6 +69,22 @@ class ReservationController < ApplicationController
 			flash[:error] = 'Sorry, but the time you have chosen is no longer available. There may haved been another user who was reserving this space at the same time. Please choose another date or time.'
 			redirect_to :action => :index
 		end 
+	end
+	
+	def cancel
+		@appointment = Appointment.find_by_id_and_email_key params[:id], params[:id2]
+		if !@appointment
+			render :nothing => true
+			return
+		else
+			if request.post?
+				@appointment.cancelled = true
+				@appointment.self_cancelled = true
+				@appointment.save
+				flash[:notice] = 'Your appointment has been cancelled. Thank you.'
+				redirect_to
+			end
+		end
 	end
 	
 	def confirmed

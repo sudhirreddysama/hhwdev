@@ -1,0 +1,23 @@
+<h1>HHW Appointment Cancellation</h1>
+
+<fieldset>
+	<legend>Collection Location and Time</legend>
+	<p>
+		<%= @appointment.when.strftime '%m/%d/%Y %I:%M %p' rescue 'Unknown date / time' %><br />
+		<% if l = @appointment.location %>
+			<%= l.name %><br />
+			<%= l.address %> <%= l.address2 %><br />
+			<%= l.city %> <%= l.state %>, <%= l.zip %>
+		<% else %>
+			Unknown Location
+		<% end %>
+	</p>
+</fieldset>
+<% if @appointment.cancelled %>
+	<h2>This appointment has been cancelled.</h2>
+	<p>&nbsp;</p>
+<% else %>
+ <%= form_tag %>
+	 <%= submit_tag 'Cancel Appointment' %>
+ </form>
+<% end %>
