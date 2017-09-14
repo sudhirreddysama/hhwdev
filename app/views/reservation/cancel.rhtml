@@ -15,9 +15,10 @@
 </fieldset>
 <% if @appointment.cancelled %>
 	<h2>This appointment has been cancelled.</h2>
-	<p>&nbsp;</p>
 <% else %>
  <%= form_tag %>
 	 <%= submit_tag 'Cancel Appointment' %>
  </form>
 <% end %>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
