@@ -132,4 +132,13 @@ EOS
 	end
 	before_create :check_flagged 
 	
+	def generate_email_key
+		if email_key.blank?
+			sample = 'bcdfghjklmnpqrstvwxyz0123456789'
+			self.email_key = 10.times.map { sample[rand(sample.size)].chr }.join
+		end
+	end
+	before_save :generate_email_key
+	
+	
 end
