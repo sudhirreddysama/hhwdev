@@ -77,9 +77,10 @@ class ReservationController < ApplicationController
 			render :nothing => true
 			return
 		else
-			if request.post?
+			if request.post? && !@appointment.cancelled
 				@appointment.cancelled = true
 				@appointment.self_cancelled = true
+				@appointment.block.update_attribute :appointments_count, @appointment.block.appointments_count - 1
 				@appointment.save
 				flash[:notice] = 'Your appointment has been cancelled. Thank you.'
 				redirect_to
