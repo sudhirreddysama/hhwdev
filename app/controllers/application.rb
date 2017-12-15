@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   #protect_from_forgery # :secret => 'a80f975e77adafb1085da89eda90b0ed'
+  filter_parameter_logging :password
 
 	def require_perm_admin
 		return false unless authorize and @current_user.admin_level >= 2
