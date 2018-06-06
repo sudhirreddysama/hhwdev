@@ -83,7 +83,7 @@ class AppointmentsController < ApplicationController
 				p['appointment_address'].value = @appointment.address.to_s
 				p['appointment_address2'].value = @appointment.address2.to_s
 				p['appointment_zip'].value = @appointment['zip'].to_s
-				p['previous_count'].update "Previous Appointments: #{@appointment.previous_count}" + ((@appointment.flagged.to_i == 1) ? ' <span style="color: #a00; font-weight: bold;">FLAGGED! ' + @appointment.sig_comment + '</span>' : '')
+				p['previous_count'].update "Previous Appointments: #{@appointment.previous_count}" + ((@appointment.flagged.to_i == 1) ? ' <span style="color: #a00; font-weight: bold;">FLAGGED! ' + @appointment.sig_comment.to_s + '</span>' : '')
 				p.replace 'appointment_municipality', :partial => 'municipality_select', :locals => {:zip => @appointment['zip'].to_s, :municipality => @appointment.municipality}
 			else
 				p.alert 'No previous record found.'
