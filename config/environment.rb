@@ -80,5 +80,5 @@ ActionMailer::Base.delivery_method = :sendmail
 ActionMailer::Base.sendmail_settings[:arguments] = '-i -t -fwebmaster@monroecounty.gov'
 
 
-ExceptionNotifier.exception_recipients = %w(jesse@jessesternberg.com)
-ExceptionNotifier.sender_address = %("Application Error" <webmaster@monroecounty.gov>)
+ExceptionNotifier.exception_recipients = %w(jessesternberg@monroecounty.gov)
+ExceptionNotifier.sender_address = %("HHW Error" <webmaster@monroecounty.gov>)
