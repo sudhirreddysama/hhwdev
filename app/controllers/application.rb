@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery # :secret => 'a80f975e77adafb1085da89eda90b0ed'
   filter_parameter_logging :password
 
+	include ExceptionNotifiable
+
 	def require_perm_admin
 		return false unless authorize and @current_user.admin_level >= 2
 	end
