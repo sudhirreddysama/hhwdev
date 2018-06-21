@@ -79,6 +79,9 @@ module ExceptionNotifiable
 
     def rescue_action_in_public(exception)
       case exception
+      	when CGI::Session::CookieStore::TamperedWithCookie #Qualys is spamming me!
+      		render_500
+      		
         when *self.class.exceptions_to_treat_as_404
           render_404
 
