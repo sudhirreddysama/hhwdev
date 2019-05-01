@@ -45,7 +45,7 @@ class SchedulesController < ApplicationController
 	def export
 		ex = ''
 		@schedule = Schedule.find params[:id]
-		ap = @schedule.appointments
+		ap = @schedule.appointments.find(:all, :order => 'appointments.last_name, appointments.first_name')
 		CSV::Writer.generate(ex) { |csv|
 			csv << [
 				'created_at',
