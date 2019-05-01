@@ -90,6 +90,7 @@
 										<% end %>										
 										<%= link_to 'Edit My Account', :controller => :login, :action => :edit, :id => nil %>
 										<%= link_to 'Logout', :controller => :login, :action => :logout, :id => nil %>
+										<%= link_to 'Tablet Schedule List', {:controller => :mobile, :id => nil}, :style => 'padding: 20px 0; text-align: center; margin-top: 20px;' %>
 									<% else %>
 										<%= link_to 'HHW Appointment Scheduler', :controller => :reservation, :action => :index, :id => nil %>
 									<% end %>

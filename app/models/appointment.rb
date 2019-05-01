@@ -44,8 +44,8 @@ class Appointment < ActiveRecord::Base
 		tbl = long_table_name ? 'appointments' : 'a'
 		if location_id or begin_date or end_date
 			c = []
-			c << "(date(#{tbl}.#{field}) > '#{begin_date}')" if begin_date
-			c << "(date(#{tbl}.#{field}) < '#{end_date}')" if end_date
+			c << "(date(#{tbl}.#{field}) >= '#{begin_date}')" if begin_date
+			c << "(date(#{tbl}.#{field}) <= '#{end_date}')" if end_date
 			c << "(#{tbl}.location_id = #{location_id})" if location_id
 			c.join(' and ')
 		end

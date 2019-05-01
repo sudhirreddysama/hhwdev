@@ -1,0 +1,363 @@
+<input type="checkbox" id="navchk1" class="navchk">
+<input type="checkbox" id="navchk2" class="navchk">
+<input type="checkbox" id="popchk">
+<div id="nav1" class="nav bar3"><div class="w">
+	<%= link_to '<i class="fas fa-fw fa-shield-alt"></i> Admin', {:controller => :schedules, :action => :view, :id => @schedule.id}, :target => '_blank' %>
+	<label for="navchk1" id="schedules-lbl"><i class="fas fa-fw fa-caret-right"></i> Schedules</label>
+	<%= link_to 'Logout <i class="fas fa-fw fa-sign-out-alt"></i>', :controller => :mobile, :action => :logout, :id => nil %>
+</div></div>
+<div id="nav2" class="nav bar3"><div class="w">
+	<a href="#" id="prev" class="disabled"><i class="fas fa-fw fa-chevron-left"></i> Prev</a>
+	<label for="navchk2" id="blocks-lbl"><i class="fas fa-fw fa-caret-right"></i> Time Blocks</label>
+	<a href="#" id="next">Next <i class="fas fa-fw fa-chevron-right"></i></a>
+</div></div>
+<div id="nav3" class="nav bar3">&nbsp;</div>
+<div id="menu1" class="menu">
+	<% @schedules.each { |s| %>
+		<a href="<%= url_for :action => :schedule, :id => s.id %>"<% if @schedule && s.id == @schedule.id %> class="active"<% end %>>
+			<%= s.date.strftime '%a' %> <%= short_date s.date %>, <%= short_time s.begin %>-<%= short_time s.end %><br>
+			<%= s.location.name %>
+		</a>
+	<% } %>
+</div>
+<div id="menu2" class="menu">
+	<% @blocks.each_with_index { |b, i| %>
+		<a href="#" data-i="<%= i %>"><%= b.time.strftime '%l:%M%p' %></a>
+	<% } %>
+</div>
+<div id="blocks">
+	<% @blocks.each { |b| %>
+		<%= render :partial => 'block', :locals => {:b => b} %>
+	<% } %>
+</div>
+<div id="pop">	
+	<div id="popb"></div>
+	<div id="popui"><div class="w">
+		<label id="popx" for="popchk"><i class="fas fa-4x fa-times"></i></label>		
+		<div id="popl"><i class="fas fa-4x fa-sync-alt fa-spin"></i></label></div>	
+	</div></div>
+	<div class="w"><div id="popc"></div></div>
+</div>
+<script>
+
+	var munis = <%= Municipality.munis_by_zip.to_json %>;
+
+	var $window = $(window);
+	var $body = $('body');
+	var navchk1 = $('#navchk1');
+	var navchk2 = $('#navchk2');
+	var blocks = $('#blocks');
+	var bheads = blocks.find('.bhead');
+	var blinks = $('#menu2 a');
+	var nav3 = $('#nav3');
+	var prev = $('#prev');
+	var next = $('#next');
+	var nav_open = false;
+	var pop_open = false;
+	var offsets = [];
+	var section = -1;
+	var max_scroll_top = -1;
+	var blocks_scroll = 0;
+	
+	var toggle_nav_open = function() {
+		var new_nav_open = navchk1[0].checked ? 'nav1' : navchk2[0].checked ? 'nav2' : false;
+		if(new_nav_open && new_nav_open != nav_open) {
+			$window.scrollTop(0);
+		}
+		else if(nav_open && !new_nav_open) {
+			$window.scrollTop(blocks_scroll);
+		}
+		nav_open = new_nav_open;
+		$body.toggleClass('navopen', nav_open).toggleClass('nav1', nav_open == 'nav1').toggleClass('nav2', nav_open == 'nav2');
+	}
+	navchk1.change(toggle_nav_open);
+	navchk2.change(toggle_nav_open);
+	
+	var prepare_nav3 = function() {
+		max_scroll_top = $body.height() - $window.height();
+		bheads.each(function(i, e) {
+			offsets[i] = $(e).offset().top;
+		});
+	};
+	
+	var update_nav3 = function(first) {
+		if(nav_open || pop_open) return;
+		blocks_scroll = $window.scrollTop();
+		var new_section = offsets.length - 1;
+		for(var i = 1; i < offsets.length; i++) {
+			if(offsets[i] >= blocks_scroll + 87) {
+				new_section = i - 1;
+				break;
+			}
+		}
+		if(section != new_section) {
+			if(section != -1) {
+				$(blinks[section]).removeClass('active');
+			}
+			$(blinks[new_section]).addClass('active');
+			section = new_section;
+			nav3.html($(bheads[section]).html());
+			if(!first) {
+				nav3.stop(true, true).effect('highlight');
+			}
+		}
+		prev.toggleClass('disabled', blocks_scroll <= 0);
+		next.toggleClass('disabled', blocks_scroll >= max_scroll_top);
+	};
+	prepare_nav3();
+	update_nav3(true);
+	$window.scroll(function(e) {
+		update_nav3();
+	});
+	$window.resize(function(e) {
+		prepare_nav3();
+		update_nav3();
+	});
+	
+	var close_nav = function() {
+		if(nav_open) {
+			navchk1[0].checked = false;
+			navchk2[0].checked = false;
+			toggle_nav_open();
+		}	
+	}
+	
+	var scroll_to = function(y) {
+		$('html, body').animate({
+			scrollTop: y
+		}, 200);
+	}
+	
+	var scroll_to_section = function(i) {
+		scroll_to(offsets[i] - 58);
+	}
+	
+	prev.click(function(e) {
+		e.preventDefault();
+		close_nav();
+		scroll_to_section(section + ($window.scrollTop() + 58 > offsets[section] ? 0 : -1));
+		$(this).blur();
+	});
+	
+	next.click(function(e) {
+		e.preventDefault();
+		close_nav();
+		if(section + 1 > bheads.length - 1) {
+			scroll_to($(document).height() - $window.height());
+		}
+		else {
+			scroll_to_section(section + 1);
+		}
+		$(this).blur();
+	});
+	
+	blinks.click(function(e) {
+		navchk2[0].checked = false;
+		toggle_nav_open();
+		e.preventDefault();
+		scroll_to_section($(this).data('i'));
+	});	
+	
+	var pop = $('#pop');
+	var popx = $('#popx');
+	var popl = $('#popl');
+	var popc = $('#popc');
+	
+	var open_pop = function(url) {		
+		pop_open = true;
+		blocks.css({position: 'fixed', top: -blocks_scroll + 'px'});
+		$window.scrollTop(0);
+		pop.show();
+		popc.html('');
+		popl.show();
+		$.ajax({
+			url: url,
+			complete: function(xhr, status) {
+				popl.hide();
+			},
+			error: function(xhr, error, status) {
+				alert('Error loading data!');
+			},
+			success: function(data, status, xhr) {
+				popc.html(data);
+			}
+		});	
+	}
+	
+	var close_pop = function() {
+		blocks.css({position: 'static', top: 0});
+		$window.scrollTop(blocks_scroll);
+		pop_open = false;
+		pop.hide();
+	}
+	
+	popx.click(function() {
+		close_pop();
+	});
+	
+	blocks.on('click', 'a.edit', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var id = $this.closest('.appt').data('id');
+		open_pop('<%= url_for(:action => :edit) %>/' + id);
+	});
+	blocks.on('click', 'a.add', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var id = $this.closest('.block').data('id');
+		open_pop('<%= url_for(:action => :new) %>/' + id);
+	});
+	
+	popc.on('submit', function(e) {
+		e.preventDefault();
+		var form = popc.find('form');
+		popc.html('');
+		popl.show();
+		$.ajax(opts = {
+			url: form.attr('action'),
+			data: form.serialize(),
+			method: 'POST',
+			complete: function(xhr, status) {
+				popl.hide();
+			},
+			error: function(xhr, error, status) {
+				alert('Error loading data!');
+			},
+			success: function(data, status, xhr) {
+				if(typeof(data) == 'string') {					
+					popc.html(data);
+				}
+				else {
+					var new_el = $(data.html);
+					$(data.el)[data.op](new_el);
+					new_el.effect('highlight');
+					var id = new_el.closest('.block').data('id');
+					$('#empty-' + id).remove();
+					close_pop();
+				}
+			}
+		});
+		console.log(opts);
+	});
+	
+	var muni_options = function() { 
+		var z = $('#obj_zip').val().substr(0, 5);
+		var m = $('#obj_municipality').val();
+		var html = '';
+		if(z) {
+			var opts = munis[z];
+			if(opts) {
+				html = '<option></option>'
+				for(var i = 0; i < opts.length; i++) {
+					html += '<option value="' + opts[i] + '">' + opts[i] + '</option>';
+				}
+			}
+			else {
+				html = '<option value="">No Municipalities For Zip</option>';
+			}
+		}
+		else {
+			html = '<option value="">Enter Zip First</option>';
+		}
+		$('#obj_municipality').html(html).val(m);
+	}
+	popc.on('change', '#obj_zip', muni_options);
+	
+	popc.on('click', '#search-prev', function(e) {
+		var btn = $('#search-prev');
+		btn.addClass('busy-bg');
+		e.preventDefault();
+		$.ajax({
+			url: '<%= url_for :action => :search_prev %>',
+			data: {phone: $('#obj_area_code').val() + $('#obj_phone_number').val()},
+			complete: function(xhr, status) {				
+				btn.removeClass('busy-bg');
+			},
+			error: function(xhr, error, status) {
+				alert('Error loading data!');
+			},
+			success: function(data, status, xhr) {
+				if(data == 'NOT FOUND') {
+					$('#previous_count').html('No Previous Appointment Found.');
+				}
+				else {
+					$('#obj_first_name').val(data.first_name).effect('highlight');
+					$('#obj_last_name').val(data.last_name).effect('highlight');
+					$('#obj_zip').val(data.zip).effect('highlight');
+					muni_options();
+					$('#obj_municipality').val(data.municipality).effect('highlight');
+					$('#obj_email').val(data.email).effect('highlight');
+					$('#obj_address').val(data.address).effect('highlight');
+					$('#obj_address2').val(data.address2).effect('highlight');
+					$('#obj_flagged').prop('checked', data.flagged == 1);
+					$('#previous_count').html('Previous Appointments: ' + data.previous_count + 
+						(data.flagged ? ' <span style="color: #a00; font-weight: bold;">FLAGGED! ' + (data.sig_comment || '') + '</span>' : '')
+					);
+				}
+			}
+		});
+	});
+	
+	var appt_toggle = function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var appt = $this.closest('.appt');
+		var id = appt.data('id');
+		$this.addClass('busy-bg-i');
+		$.ajax({
+			data: {value: !$this.hasClass('active') ? '1' : '0'},
+			url: '<%= url_for :action => :toggle %>/' + e.data + '/' + id,
+			complete: function(xhr, status) {
+				$this.removeClass('busy-bg-i');
+			},
+			error: function(xhr, status, error) {
+				alert('Unable to save data.');
+			},
+			success: function(data, status, xhr) {
+				var v = data == '1';
+				$this.toggleClass('active', v);
+				if(v) {
+					if(e.data == 'signed_in') appt.find('.no_show').removeClass('active');
+					if(e.data == 'no_show') appt.find('.signed_in').removeClass('active');
+				}
+			}
+		});
+	}
+	
+	var update_plate = function() {
+		var $this = $(this);
+		$this.blur();
+		var appt = $this.closest('.appt');
+		var id = appt.data('id');
+		var v = $this.val().toUpperCase();
+		$this.val(v);
+		$this.addClass('busy-bg');
+		var success = false;
+		$.ajax({
+			url: '<%= url_for :action => :license_plate %>/' + id,
+			data: {value: v},
+			complete: function(xhr, status) { console.log('complete');
+				$this.removeClass('busy-bg');
+				if(success) {
+					$this.effect('highlight');
+				}
+			},
+			error: function(xhr, status, error) {
+				alert('Unable to save data.');
+			},
+			success: function(data, status, xhr) {
+				success = true;
+			}
+		});
+	}
+	
+	blocks.on('click', 'a.signed_in', 'signed_in', appt_toggle);
+	blocks.on('click', 'a.no_show', 'no_show', appt_toggle);
+	blocks.on('click', 'a.flagged', 'flagged', appt_toggle);	
+	blocks.on('change', 'input.plate', update_plate);
+
+</script>
+
+
+
+

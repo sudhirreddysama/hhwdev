@@ -1,0 +1,20 @@
+<div id="block-<%= b.id %>" data-id="<%= b.id %>" class="block">
+	<div class="bhead bar3"><div class="w">
+		<span><%= @schedule.date.strftime '%m/%d/%Y' %></span>
+		<span><%= @schedule.location.name %></span>
+		<span><%= b.time.strftime '%l:%M%p' %></span>
+	</div></div>
+	<div id="appts-<%= b.id %>" class="appts">
+		<% appts = b.appointments.find(:all, :conditions => 'appointments.cancelled = 0') %>
+		<% if appts.empty? %>
+			<div class="appt empty" id="empty-<%= b.id %>"><div class="w">No Appointments</div></div>
+		<% else %>
+			<% appts.each { |a| %>
+				<%= render :partial => 'appointment', :locals => {:a => a} %>
+			<% } %>
+		<% end %>
+	</div>
+	<div class="appt"><div class="w">
+		<a href="#" class="add rbtn"><i class="fas fa-plus-circle"></i> Add Walk-In</a>
+	</div></div>
+</div>

@@ -1,0 +1,20 @@
+<div id="appt-<%= a.id %>" data-id="<%= a.id %>" class="appt"><div class="w">
+	<div class="ainfo">
+		<% c = a.previous_count %>
+		<% red = [c * 25, 255].min %>
+		<div>
+			<%= a.first_name %> <%= a.last_name %> <span style="color: rgb(<%= red %>, 0, 0);">(<%= c %>)</span> <% if a.flagged %><i class="fas fa-flag red"></i> <% end %> 
+			<% if a.walk_in %><i class="fas fa-walking"></i><% elsif !a.online %><i class="fas fa-phone"></i><% end %>
+		</div>
+		<div><%= a.address %>, <%= a.municipality %></div>
+		<% if !a.sig_comment.blank? %>
+			<div class="sigc"><%= h a.sig_comment %></div>
+		<% end %>
+	</div>
+	<div class="abtns">
+		<a href="#" class="rbtn signed_in<% if a.signed_in %> active<% end %>"><i class="fas fa-check"></i> Sign In</a>
+		<a href="#" class="rbtn no_show<% if a.no_show %> active<% end %>"><i class="fas fa-user-slash"></i> No Show</a>
+		<a href="#" class="rbtn edit"><i class="fas fa-edit"></i> Edit</a>
+		<input class="plate" type="text" placeholder="License Plate #" value="<%= a.license_plate %>">
+	</div>
+</div></div>

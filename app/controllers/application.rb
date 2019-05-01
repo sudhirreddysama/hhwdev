@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
 	end
   
   def load_current_user
+  	return nil if session[:user_id].blank?
   	@current_user = User.find_by_id_and_deleted(session[:user_id], false)
   end
   

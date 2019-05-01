@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
 		if request.post?
 			@filter = params[:filter]
 			@filter.errors = []
-			@filter.location_id = nil if @filter.location_id.blank?
+			@filter.location_id = @filter.location_id.blank? ? nil : @filter.location_id.to_i
 			@filter.begin_date = Date.parse(@filter.begin) rescue @filter.errors << 'Invalid value for begin date.' unless @filter.begin.blank?
 			@filter.end_date = Date.parse(@filter.end) rescue @filter.errors << 'Invalid value for end date.' unless @filter.end.blank?
 			if params[:commit] == 'Export' and @filter.errors.empty?
@@ -41,6 +41,7 @@ class ReportsController < ApplicationController
 				'created_at',
 				'created_by',
 				'appointment_date_time',
+				'cancelled',
 				'first_name',
 				'last_name',
 				'phone',
@@ -62,6 +63,7 @@ class ReportsController < ApplicationController
 					(a.created_at.strftime('%m/%d/%Y %I:%M %p') rescue nil), 
 					(a.user.username rescue nil), 
 					(a.when.strftime('%m/%d/%Y %I:%M %p') rescue nil),
+					a.cancelled,
 					a.first_name,
 					a.last_name,
 					a.phone,

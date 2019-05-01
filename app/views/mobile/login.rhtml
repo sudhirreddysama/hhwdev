@@ -1,0 +1,20 @@
+<div id="login">
+	<h1>HHW Tablet Login</h1>
+	<%= render :partial => 'errors', :locals => {:errors => @errors} %>
+	<%= form_tag %>
+		<div class="field">
+			<label>Username:</label>
+			<%= text_field_tag 'username', params[:username], :style => 'width: 100%;' %>
+		</div>
+		<div class="field">
+			<label>Password:</label>
+			<%= password_field_tag 'password', params[:password], :autocomplete => 'off', :style => 'width: 100%;' %>
+		</div>
+		<div class="field">
+			<button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+		</div>
+		<div class="field">
+			<%= link_to 'Desktop Login', :controller => :login, :action => :index %>
+		</div>
+	</form>
+</div>

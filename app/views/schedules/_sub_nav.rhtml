@@ -6,5 +6,6 @@
 		<%= tab 'Delete', :action => :delete, :id => @schedule.id %>
 		<%= tab('Merge Schedules', :id => @schedule.id, :action => :merge) if @schedule and not @schedule.new_record? and @current_user.admin_level >= 2 %>		
 	<% end %>
+	<%= tab 'Export', :action => :export, :id => @schedule.id %>
 	<div class="clear"></div>
 </div>

@@ -42,6 +42,58 @@ class SchedulesController < ApplicationController
 		end
 	end
 	
+	def export
+		ex = ''
+		@schedule = Schedule.find params[:id]
+		ap = @schedule.appointments
+		CSV::Writer.generate(ex) { |csv|
+			csv << [
+				'created_at',
+				'created_by',
+				'appointment_date_time',
+				'cancelled',
+				'first_name',
+				'last_name',
+				'phone',
+				'address1',
+				'address2',
+				'city',
+				'municipality',
+				'state',
+				'zip',
+				'collection_name',
+				'collection_address1',
+				'collection_address2',
+				'collection_city',
+				'collection_state',
+				'collection_zip']
+			ap.each { |a| 
+				csv << [
+					(a.created_at.strftime('%m/%d/%Y %I:%M %p') rescue nil), 
+					(a.user.username rescue nil), 
+					(a.when.strftime('%m/%d/%Y %I:%M %p') rescue nil),
+					a.cancelled,
+					a.first_name,
+					a.last_name,
+					a.phone,
+					a.address,
+					a.address2,
+					a.city,
+					a.municipality,
+					a.state,
+					a.zip,
+					(a.location.name rescue nil),
+					(a.location.address rescue nil),
+					(a.location.address2 rescue nil),
+					(a.location.city rescue nil),
+					(a.location.state rescue nil),
+					(a.location.zip rescue nil)
+				]
+			}
+		}
+		send_data ex, :filename => 'export.csv'		
+	end
+	
 	def delete
 		@schedule = Schedule.find params[:id]
 		if request.post? and @schedule.fake_destroy

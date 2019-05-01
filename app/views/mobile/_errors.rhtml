@@ -1,0 +1,3 @@
+<% unless errors.nil? or errors.empty? %>
+	<div class="errors"><% errors.each { |e| %><div><%= h e %></div><% } %></div>
+<% end %>

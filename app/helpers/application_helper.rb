@@ -23,5 +23,17 @@ module ApplicationHelper
 	def nl2br_h s
  		nl2br h(s)
  	end
+ 	
+	def partial p, l = nil
+		render :partial => p, :locals => l
+	end
+
+	def short_date(d)
+		"#{d.month}/#{d.day}/#{d.year.to_s[-2,2]}"
+	end
+	
+	def short_time(t)
+		"#{t.strftime('%I').to_i}:#{t.strftime('%M')}#{t.strftime('%p').downcase}"
+	end
 
 end
