@@ -23,17 +23,15 @@
 	<body>
 		<% if RAILS_ENV == 'development' %><div style="color: #fff; background-color: #a00; text-align: center; padding: 2px; border-bottom: 1px solid #f00; font-weight:bold;">DEVELOPMENT SITE</div><% end %>
 		<div id="wrap">
-			<div id="login">
-				<p>
-					<% if !@current_user %>
-						<%= link_to 'Login', :controller => :login, :action => :index, :id => nil %>
-					<% else %>
-						HHW Backend	
-					<% end %>
-				</p>
-			</div>
 			<% unless @current_user %>
 				<div id="header" style="background-image: url(/i-p/masthead-main.jpg);">
+					<div style="float: right; color: #000;">
+						<% if !@current_user %>
+							<%= link_to 'Login', {:controller => :login, :action => :index, :id => nil}, :style => 'color: #000;' %>
+						<% else %>
+							HHW Backend	
+						<% end %>				
+					</div>
 				</div>
 			<% end %>
 			<div id="navbar">
