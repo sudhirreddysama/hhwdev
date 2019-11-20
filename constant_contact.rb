@@ -2,6 +2,16 @@ require 'rubygems'
 require 'json'
 require 'net/http'
 
+# DES login to manage email list:
+# https://www.constantcontact.com
+# user: monroecounty
+# pass: ctct123
+
+# Developer login:
+# https://constantcontact.mashery.com/login
+# jessesternbergmc
+# ad.IS.34.email
+
 module ConstantContact
 		
 	def self.add_contact email
