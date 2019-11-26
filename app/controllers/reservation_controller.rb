@@ -56,6 +56,7 @@ class ReservationController < ApplicationController
 			@appointment.email_signup = true
 			@appointment.attributes = params[:appointment]
 			if request.post? and @appointment.save
+				@appointment.email_setup_in_constantcontact unless @appointment.email.blank?
 				@block.update_attribute :appointments_count, @block.appointments_count + 1
 				Notifier.deliver_confirmation @appointment
 				unless @appointment.comments.blank? and @appointment.admin_comments.blank?

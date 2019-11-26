@@ -1,3 +1,8 @@
+require 'rubygems'
+require "net/http"
+require "uri"
+require "json"
+
 class Appointment < ActiveRecord::Base
 
 	has_many :answers
@@ -140,5 +145,20 @@ EOS
 	end
 	before_save :generate_email_key
 	
-	
+	def email_setup_in_constantcontact
+		app_key = 't6yyd9cxa3zcq2y963q427np'
+		access_key = 'fc1b1c5d-3d2b-4486-ba13-b151d85f9513'
+		uri = URI.parse "https://api.constantcontact.com/v2/contacts?api_key=#{app_key}"
+
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = true
+
+		header = {'Content-Type'=> 'application/json', 'Authorization' => "Bearer #{access_key}" }
+		request = Net::HTTP::Post.new(uri.request_uri, header)
+		user = {"status"=>"ACTIVE","lists"=>[{"id"=>"1386195626"}],"email_addresses"=> [{"status"=>"ACTIVE","email_address"=>email}], "first_name"=>first_name,"last_name"=>last_name}
+
+		request.body = user.to_json
+		response = http.request(request)
+		puts response.body
+	end
 end
